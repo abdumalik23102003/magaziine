@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class ProductImage extends Model
 {
@@ -17,8 +19,31 @@ class ProductImage extends Model
         'is_main',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'is_main' => 'boolean',
+            'sort_order' => 'integer',
+        ];
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * "foodmart/..." bilan boshlangan yo'l public/ papkadagi shablon rasmi,
+     * qolgani (Filament yuklagan) storage/public diskida.
+     */
+    protected function url(): Attribute
+    {
+        return Attribute::get(function () {
+            if (str_starts_with($this->path, 'foodmart/')) {
+                return asset($this->path);
+            }
+
+            return Storage::disk('public')->url($this->path);
+        });
     }
 }

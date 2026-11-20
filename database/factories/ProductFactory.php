@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;

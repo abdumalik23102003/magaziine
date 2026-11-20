@@ -3,71 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
-        $products = Product::with([
-            'category',
-            'mainImage',
-            'variants',
-        ])
-            ->where('is_active', true)
+        $featured = Product::active()
+            ->forCard()
+            ->has('activeVariants')
+            ->latest()
+            ->take(8)
             ->get();
 
-        return view('pages.home', compact('products'));
-    }
+        $discounted = Product::active()
+            ->forCard()
+            ->whereHas('activeVariants', fn ($q) => $q->where('discount_percentage', '>', 0))
+            ->latest()
+            ->take(4)
+            ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
+        return view('pages.home', compact('featured', 'discounted'));
     }
 }

@@ -8,13 +8,9 @@ class UnitFactory extends Factory
 {
     public function definition(): array
     {
-        $units = [
-            ['name' => 'Kilogram', 'short_name' => 'kg'],
-            ['name' => 'Liter', 'short_name' => 'l'],
-            ['name' => 'Piece', 'short_name' => 'pc'],
-            ['name' => 'Gram', 'short_name' => 'g'],
+        return [
+            'name' => fake()->unique()->word(),
+            'short_name' => fake()->lexify('??'),
         ];
-
-        return fake()->randomElement($units);
     }
 }
