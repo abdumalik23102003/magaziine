@@ -31,7 +31,7 @@ class CategoryForm
                         'parent',
                         'name',
                         modifyQueryUsing: fn (Builder $query, ?Model $record) => $record
-                            ? $query->whereKeyNot($record->getKey())
+                            ? $query->whereNotIn('id', [$record->getKey(), ...$record->descendantIds()])
                             : $query,
                     )
                     ->searchable()

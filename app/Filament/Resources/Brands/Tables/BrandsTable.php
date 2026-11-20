@@ -29,7 +29,7 @@ class BrandsTable
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->hidden(fn (Brand $record): bool => $record->products()->exists()),
+                    ->hidden(fn (Brand $record): bool => $record->products()->withTrashed()->exists()),
             ]);
     }
 }

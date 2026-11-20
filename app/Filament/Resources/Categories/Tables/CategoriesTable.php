@@ -32,7 +32,7 @@ class CategoriesTable
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->hidden(fn (Category $record): bool => $record->products()->exists()),
+                    ->hidden(fn (Category $record): bool => $record->products()->withTrashed()->exists()),
             ]);
     }
 }

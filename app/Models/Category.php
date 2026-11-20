@@ -27,4 +27,22 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    /** @return array<int, int> ids of all nested children, grandchildren, etc. */
+    public function descendantIds(): array
+    {
+        $all = [];
+        $level = [$this->getKey()];
+
+        while ($level !== []) {
+            $level = static::query()
+                ->whereIn('parent_id', $level)
+                ->pluck('id')
+                ->all();
+
+            $all = [...$all, ...$level];
+        }
+
+        return $all;
+    }
 }

@@ -40,6 +40,19 @@ class ProductImage extends Model
                 $image->forceFill(['is_main' => true])->saveQuietly();
             }
         });
+
+        static::deleted(function (ProductImage $image): void {
+            if (! $image->is_main) {
+                return;
+            }
+
+            static::query()
+                ->where('product_id', $image->product_id)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->first()
+                ?->update(['is_main' => true]);
+        });
     }
 
     protected function casts(): array

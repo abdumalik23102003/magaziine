@@ -28,7 +28,7 @@ class UnitsTable
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->hidden(fn (Unit $record): bool => $record->products()->exists()),
+                    ->hidden(fn (Unit $record): bool => $record->products()->withTrashed()->exists()),
             ]);
     }
 }
