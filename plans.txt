@@ -1,0 +1,69 @@
+cards {
+    card 1: {
+        category bilan chegirmalari bor productlar blogini qilish
+    }
+    card 2: {
+        category cardlari
+    }
+    card 3: {
+        yangi qoshilgan brendlar cardlari
+    }
+    card 4: {
+        haftada eng kop sotilgan productlar cardlari
+    }
+    card 5: {
+        maxsus reklamalar kardlari
+    }
+    card 5: {
+        otgan oydagi eng kop sotilgan productlar cardlari
+    }
+    card 6: {
+        ommabop tovarlar kategoriyasini yasash va uni cardlari
+    }
+    card 7: {
+        songgi 3 kun ichida keltirilgan tovarlar va ularni cardlari
+    }
+    card 8: {
+        bloglar va ularning cardlari va ularga alohida page
+    }
+    card 9: {
+        tags cardlari
+    }
+}
+
+pages {
+    page 1: {
+        main page
+    }
+    page 2: {
+        search va filter uchun yagona page
+    }
+    page 3: {
+        cart page
+    }
+    page 4: {
+        checkout page
+    }
+    page 5: {
+        liked products page
+    }
+    page 6: {
+        profile page
+    }
+}
+
+product {
+    title
+    slug
+    description
+    price
+    discount_percentage
+    images
+}
+
+categories {
+    id
+    parent_id
+    name
+    slug
+}

@@ -1,0 +1,159 @@
+/* ============================================
+   FoodMart v2 - Typography & Text
+   ============================================ */
+
+/* Headings with style variants */
+.fm-heading-display {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.fm-heading-xl {
+  font-size: clamp(1.875rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.fm-heading-lg {
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  font-weight: 700;
+}
+
+.fm-heading-md {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+}
+
+/* Text styles */
+.fm-text-lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+.fm-text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.fm-text-xs {
+  font-size: var(--font-size-xs);
+}
+
+.fm-text-muted {
+  color: var(--ink-3);
+}
+
+.fm-text-light {
+  color: var(--ink-4);
+}
+
+.fm-text-primary {
+  color: var(--primary);
+}
+
+.fm-text-accent {
+  color: var(--accent);
+}
+
+/* Weight */
+.fm-font-regular {
+  font-weight: 400;
+}
+
+.fm-font-medium {
+  font-weight: 500;
+}
+
+.fm-font-semibold {
+  font-weight: 600;
+}
+
+.fm-font-bold {
+  font-weight: 700;
+}
+
+/* Serif font */
+.fm-serif {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+}
+
+/* Text decoration */
+.fm-link-underline {
+  position: relative;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.fm-link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition);
+}
+
+.fm-link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Line clamping */
+.fm-line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fm-line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fm-line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Letter spacing */
+.fm-tracking-tight {
+  letter-spacing: -0.02em;
+}
+
+.fm-tracking-normal {
+  letter-spacing: 0;
+}
+
+.fm-tracking-wide {
+  letter-spacing: 0.05em;
+}
+
+/* Capitalize */
+.fm-capitalize {
+  text-transform: capitalize;
+}
+
+.fm-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Drop cap effect */
+.fm-drop-cap::first-letter {
+  float: left;
+  font-size: 2.5em;
+  font-weight: 700;
+  line-height: 1;
+  padding-right: 0.25rem;
+  font-family: var(--font-serif);
+}

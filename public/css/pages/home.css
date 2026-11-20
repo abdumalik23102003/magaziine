@@ -1,0 +1,71 @@
+  /* PHYSICS-ENABLED HERO CIRCULAR CONTAINER */
+  .hero-orbit-stage {
+    position: relative;
+    width: 380px;
+    height: 380px;
+    max-width: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .floating-fruit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    user-select: none;
+    will-change: transform;
+    cursor: grab;
+    transform-origin: center center;
+    transition: filter 0.2s ease, transform 0.02s linear;
+  }
+  .floating-fruit:active, .floating-fruit.is-dragging {
+    cursor: grabbing !important;
+    filter: drop-shadow(0 0 28px rgba(0, 245, 155, 0.95)) drop-shadow(0 0 45px rgba(210, 255, 0, 0.6)) scale(1.18) !important;
+    z-index: 50 !important;
+  }
+
+  .fruit-avocado {
+    font-size: 4.8rem;
+    filter: drop-shadow(0 14px 24px rgba(0, 245, 155, 0.45));
+    z-index: 12;
+  }
+
+  .fruit-broccoli {
+    font-size: 4.6rem;
+    filter: drop-shadow(0 14px 24px rgba(16, 185, 129, 0.45));
+    z-index: 10;
+  }
+
+  .fruit-orange {
+    font-size: 5.1rem;
+    filter: drop-shadow(0 16px 28px rgba(249, 115, 22, 0.45));
+    z-index: 15;
+  }
+
+  .fruit-strawberry {
+    font-size: 4.4rem;
+    filter: drop-shadow(0 14px 24px rgba(244, 63, 94, 0.45));
+    z-index: 14;
+  }
+
+  /* Impact spark flash ring inside physics stage */
+  .impact-spark {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.2);
+    animation: impactPulse 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    z-index: 4;
+  }
+  @keyframes impactPulse {
+    0% {
+      opacity: 0.9;
+      transform: translate(-50%, -50%) scale(0.2);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.6);
+    }
+  }

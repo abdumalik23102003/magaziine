@@ -1,0 +1,325 @@
+/* ============================================
+   FoodMart v2 - Layout & Grid
+   ============================================ */
+
+/* Container */
+.fm-container {
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .fm-container {
+    padding-left: var(--space-2xl);
+    padding-right: var(--space-2xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .fm-container {
+    padding-left: var(--space-3xl);
+    padding-right: var(--space-3xl);
+  }
+}
+
+/* Section */
+.fm-section {
+  padding: var(--space-3xl) 0;
+}
+
+@media (min-width: 768px) {
+  .fm-section {
+    padding: var(--space-4xl) 0;
+  }
+}
+
+.fm-section-sm {
+  padding: var(--space-2xl) 0;
+}
+
+.fm-section-lg {
+  padding: var(--space-4xl) 0;
+}
+
+/* Grid */
+.fm-grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .fm-grid {
+    gap: var(--space-2xl);
+  }
+}
+
+.fm-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.fm-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.fm-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.fm-grid-5 {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.fm-grid-6 {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+/* Bento Grid */
+.fm-bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .fm-bento {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .fm-bento {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.fm-bento-item {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  transition: all var(--transition);
+}
+
+.fm-bento-item:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.fm-bento-item-large {
+  grid-column: span 1;
+}
+
+@media (min-width: 768px) {
+  .fm-bento-item-large {
+    grid-column: span 2;
+  }
+}
+
+/* Flex */
+.fm-flex {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.fm-flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.fm-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.fm-flex-col {
+  flex-direction: column;
+}
+
+.fm-flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* Spacing helpers */
+.fm-mt-xs { margin-top: var(--space-xs); }
+.fm-mt-sm { margin-top: var(--space-sm); }
+.fm-mt-md { margin-top: var(--space-md); }
+.fm-mt-lg { margin-top: var(--space-lg); }
+.fm-mt-xl { margin-top: var(--space-xl); }
+.fm-mt-2xl { margin-top: var(--space-2xl); }
+.fm-mt-3xl { margin-top: var(--space-3xl); }
+.fm-mt-4xl { margin-top: var(--space-4xl); }
+
+.fm-mb-xs { margin-bottom: var(--space-xs); }
+.fm-mb-sm { margin-bottom: var(--space-sm); }
+.fm-mb-md { margin-bottom: var(--space-md); }
+.fm-mb-lg { margin-bottom: var(--space-lg); }
+.fm-mb-xl { margin-bottom: var(--space-xl); }
+.fm-mb-2xl { margin-bottom: var(--space-2xl); }
+.fm-mb-3xl { margin-bottom: var(--space-3xl); }
+.fm-mb-4xl { margin-bottom: var(--space-4xl); }
+
+.fm-px-lg { padding-left: var(--space-lg); padding-right: var(--space-lg); }
+.fm-px-xl { padding-left: var(--space-xl); padding-right: var(--space-xl); }
+.fm-px-2xl { padding-left: var(--space-2xl); padding-right: var(--space-2xl); }
+
+.fm-py-lg { padding-top: var(--space-lg); padding-bottom: var(--space-lg); }
+.fm-py-xl { padding-top: var(--space-xl); padding-bottom: var(--space-xl); }
+.fm-py-2xl { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+.fm-py-3xl { padding-top: var(--space-3xl); padding-bottom: var(--space-3xl); }
+.fm-py-4xl { padding-top: var(--space-4xl); padding-bottom: var(--space-4xl); }
+
+/* Aspect Ratios */
+.fm-aspect-square {
+  aspect-ratio: 1;
+}
+
+.fm-aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.fm-aspect-3-2 {
+  aspect-ratio: 3 / 2;
+}
+
+/* Overflow & Visibility */
+.fm-overflow-hidden {
+  overflow: hidden;
+}
+
+.fm-overflow-auto {
+  overflow: auto;
+}
+
+.fm-hidden {
+  display: none;
+}
+
+.fm-visible {
+  display: block;
+}
+
+/* Responsive display */
+@media (max-width: 767px) {
+  .fm-hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .fm-hide-tablet-up {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fm-hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Width helpers */
+.fm-w-full {
+  width: 100%;
+}
+
+.fm-w-auto {
+  width: auto;
+}
+
+.fm-max-w-sm {
+  max-width: 24rem;
+}
+
+.fm-max-w-md {
+  max-width: 28rem;
+}
+
+.fm-max-w-lg {
+  max-width: 32rem;
+}
+
+.fm-max-w-xl {
+  max-width: 36rem;
+}
+
+.fm-max-w-2xl {
+  max-width: 42rem;
+}
+
+.fm-max-w-3xl {
+  max-width: 48rem;
+}
+
+.fm-max-w-4xl {
+  max-width: 56rem;
+}
+
+/* Background */
+.fm-bg-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.fm-bg-accent {
+  background-color: var(--accent);
+  color: white;
+}
+
+.fm-bg-surface {
+  background-color: var(--surface);
+}
+
+.fm-bg-light {
+  background-color: var(--surface-2);
+}
+
+.fm-bg-lighter {
+  background-color: var(--surface-3);
+}
+
+/* Border */
+.fm-border {
+  border: 1px solid var(--border);
+}
+
+.fm-border-top {
+  border-top: 1px solid var(--border);
+}
+
+.fm-border-bottom {
+  border-bottom: 1px solid var(--border);
+}
+
+.fm-border-primary {
+  border-color: var(--primary);
+}
+
+/* Rounded */
+.fm-rounded-sm {
+  border-radius: var(--radius-sm);
+}
+
+.fm-rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.fm-rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.fm-rounded-xl {
+  border-radius: var(--radius-xl);
+}
+
+.fm-rounded-full {
+  border-radius: var(--radius-full);
+}
