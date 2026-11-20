@@ -31,7 +31,7 @@ class User extends Authenticatable implements FilamentUser
     /** is_admin ataylab $fillable da yo'q: oddiy forma orqali admin bo'lib bo'lmasin. */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->is_admin;
+        return (bool) $this->is_admin;
     }
 
     public function carts(): HasMany
