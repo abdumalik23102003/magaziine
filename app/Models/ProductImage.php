@@ -19,6 +19,29 @@ class ProductImage extends Model
         'is_main',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (ProductImage $image): void {
+            if ($image->is_main) {
+                static::query()
+                    ->where('product_id', $image->product_id)
+                    ->whereKeyNot($image->getKey())
+                    ->update(['is_main' => false]);
+
+                return;
+            }
+
+            $hasMain = static::query()
+                ->where('product_id', $image->product_id)
+                ->where('is_main', true)
+                ->exists();
+
+            if (! $hasMain) {
+                $image->forceFill(['is_main' => true])->saveQuietly();
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [
@@ -32,10 +55,6 @@ class ProductImage extends Model
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * "foodmart/..." bilan boshlangan yo'l public/ papkadagi shablon rasmi,
-     * qolgani (Filament yuklagan) storage/public diskida.
-     */
     protected function url(): Attribute
     {
         return Attribute::get(function () {
