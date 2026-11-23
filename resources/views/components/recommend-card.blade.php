@@ -1,4 +1,4 @@
-@props(['name', 'tag', 'tagClass' => 'text-accent-hyper-emerald', 'kicker', 'meta', 'price', 'img', 'alt' => '', 'addName' => null])
+@props(['name', 'tag', 'tagClass' => 'text-accent-hyper-emerald', 'kicker', 'meta', 'price', 'img', 'alt' => '', 'addName' => null, 'href' => null])
 
 <div class="bg-surface-carbon p-space-md rounded-xl shadow-md group hover:bg-surface-slate transition-all flex flex-col justify-between">
     <div class="relative h-44 rounded-lg overflow-hidden bg-surface-slate mb-space-sm">
@@ -7,7 +7,13 @@
     </div>
     <div>
         <div class="font-label-sm text-label-sm uppercase text-text-muted tracking-wider">{{ $kicker }}</div>
-        <div class="font-title text-title text-text-crisp font-semibold mt-0.5">{{ $name }}</div>
+        <div class="font-title text-title text-text-crisp font-semibold mt-0.5">
+            @if ($href)
+                <a href="{{ $href }}" class="hover:text-accent-hyper-emerald transition-colors">{{ $name }}</a>
+            @else
+                {{ $name }}
+            @endif
+        </div>
         <div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{{ $meta }}</div>
     </div>
     <div class="flex items-center justify-between mt-space-md pt-space-xs">

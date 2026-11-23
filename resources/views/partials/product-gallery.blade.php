@@ -3,7 +3,7 @@
         <div class="flex items-center gap-space-xs text-text-crisp font-label-md text-label-md">
             <span class="material-symbols-outlined text-accent-hyper-emerald text-[18px]">eco</span>
             <span class="text-accent-hyper-emerald font-semibold">Harvest Delta:</span>
-            <span>{{ $product['harvest'] }}</span>
+            <span>{{ $info['harvest'] }}</span>
         </div>
         <div class="flex items-center gap-space-xs">
             <span class="font-label-sm text-label-sm uppercase text-text-muted">Microbiome Index:</span>

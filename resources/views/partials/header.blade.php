@@ -22,13 +22,13 @@
 </a>
 </div>
 <!-- Search Bar -->
-<div class="hidden lg:flex flex-1 max-w-lg relative">
+<form action="{{ route('catalog.index') }}" method="GET" role="search" class="hidden lg:flex flex-1 max-w-lg relative">
 <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-primary/70 text-sm"></i>
-<input class="w-full bg-surface-carbon border border-border-glass hover:border-primary/40 focus:border-primary rounded-full py-2.5 pl-11 pr-5 text-sm text-text-crisp placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search organic harvest, crisp greens, artisan sourdough..." type="text"/>
+<input class="w-full bg-surface-carbon border border-border-glass hover:border-primary/40 focus:border-primary rounded-full py-2.5 pl-11 pr-5 text-sm text-text-crisp placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" name="q" value="{{ is_string(request()->query('q')) ? request()->query('q') : '' }}" maxlength="100" placeholder="Search organic harvest, crisp greens, artisan sourdough..." type="search"/>
 <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-zinc-500 bg-surface-elevated px-2 py-0.5 rounded border border-border-glass">
           ⌘K
         </div>
-</div>
+</form>
 <!-- Quick Nav Action Counters (with unclipped, visible absolute badges) -->
 <div class="flex items-center gap-3 sm:gap-4">
 <div class="hidden sm:flex flex-col text-right mr-1">
@@ -58,29 +58,28 @@
 <!-- Category Nav Pills -->
 <div class="border-t border-border-glass/60 bg-surface-obsidian/50 overflow-x-auto scrollbar-none py-2.5 px-4 sm:px-6 lg:px-8">
 <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-<nav class="flex items-center gap-2 whitespace-nowrap">
-<a class="water-ripple-target px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-primary text-black flex items-center gap-1.5 shadow-[0_0_16px_rgba(0,245,155,0.35)] cursor-pointer" href="#">
-<i class="bi bi-grid-fill"></i> All Departments
-          </a>
-<a class="water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30 transition-all flex items-center gap-1.5 cursor-pointer" href="#">
-<i class="bi bi-flower1 text-primary"></i> Fresh Vegetables
-          </a>
-<a class="water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30 transition-all flex items-center gap-1.5 cursor-pointer" href="#">
-<i class="bi bi-apple text-primary"></i> Organic Fruits
-          </a>
-<a class="water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30 transition-all flex items-center gap-1.5 cursor-pointer" href="#">
-<i class="bi bi-egg-fried text-primary"></i> Dairy &amp; Eggs
-          </a>
-<a class="water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30 transition-all flex items-center gap-1.5 cursor-pointer" href="#">
-<i class="bi bi-cup-hot text-primary"></i> Bakery &amp; Breads
-          </a>
-<a class="water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30 transition-all flex items-center gap-1.5 cursor-pointer" href="#">
-<i class="bi bi-droplet-half text-primary"></i> Beverages
-          </a>
-<a class="water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-semibold text-accent-lime hover:text-white bg-surface-carbon/80 border border-accent-lime/30 transition-all flex items-center gap-1.5 cursor-pointer" href="#">
+<nav class="flex items-center gap-2 whitespace-nowrap" aria-label="Departments">
+@php
+    $pillOn = 'water-ripple-target px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-primary text-black flex items-center gap-1.5 shadow-[0_0_16px_rgba(0,245,155,0.35)] cursor-pointer';
+    $pillOff = 'water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30 transition-all flex items-center gap-1.5 cursor-pointer';
+    $pillDeal = 'water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-semibold text-accent-lime hover:text-white bg-surface-carbon/80 border border-accent-lime/30 transition-all flex items-center gap-1.5 cursor-pointer';
+    $activeCategory = request()->route('category');
+    $allActive = request()->routeIs('catalog.index') && ! request()->boolean('discounted');
+@endphp
+<a class="{{ $allActive ? $pillOn : $pillOff }}" href="{{ route('catalog.index') }}">
+<i class="bi bi-grid-fill {{ $allActive ? '' : 'text-primary' }}"></i> All Departments
+</a>
+@foreach ($navCategories as $navCategory)
+@php($isOn = $activeCategory && ($activeCategory->id === $navCategory->id || $activeCategory->parent_id === $navCategory->id))
+<a class="{{ $isOn ? $pillOn : $pillOff }}" href="{{ route('catalog.category', $navCategory->slug) }}">
+<i class="bi bi-tag {{ $isOn ? '' : 'text-primary' }}"></i> {{ $navCategory->name }}
+</a>
+@endforeach
+<a class="{{ $pillDeal }}" href="{{ route('catalog.index', ['discounted' => 1]) }}">
 <i class="bi bi-stars"></i> Special Deals %
-          </a>
+</a>
 </nav>
+
 <div class="hidden xl:flex items-center gap-2 text-xs font-mono text-primary/80 whitespace-nowrap pl-4">
 <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
 <span>ION CURSOR ENGINE ONLINE</span>

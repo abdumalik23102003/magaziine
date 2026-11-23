@@ -3,9 +3,9 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center pb-space-lg">
             <div class="md:col-span-4 flex items-center gap-space-lg">
                 <div class="flex flex-col">
-                    <span class="font-display text-display text-text-crisp font-bold leading-none">{{ $product['rating'] }}</span>
-                    <x-star-rating :rating="$product['rating']" :size="20" class="mt-1"/>
-                    <span class="font-body-sm text-body-sm text-text-muted mt-1">Based on {{ $product['reviews'] }} verified harvest deliveries</span>
+                    <span class="font-display text-display text-text-crisp font-bold leading-none">{{ $info['rating'] }}</span>
+                    <x-star-rating :rating="$info['rating']" :size="20" class="mt-1"/>
+                    <span class="font-body-sm text-body-sm text-text-muted mt-1">Based on {{ $info['reviews'] }} verified harvest deliveries</span>
                 </div>
             </div>
             <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-space-sm">

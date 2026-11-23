@@ -28,7 +28,10 @@
   packs.forEach(btn => btn.addEventListener('click', () => {
     select(packs, btn);
     state.price = parseFloat(btn.dataset.price);
-    $('#unit-price').textContent = money(btn.dataset.per) + ' / unit';
+    const oldEl = $('#old-price');
+    if (oldEl) { oldEl.textContent = btn.dataset.old ? money(btn.dataset.old) : ''; oldEl.classList.toggle('hidden', !btn.dataset.old); }
+    const badgeEl = $('#discount-badge');
+    if (badgeEl) { badgeEl.textContent = btn.dataset.badge || ''; badgeEl.classList.toggle('hidden', !btn.dataset.badge); }
     $('#size-label').textContent = btn.dataset.label;
     renderPrice();
   }));

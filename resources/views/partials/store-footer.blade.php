@@ -1,5 +1,10 @@
 @php
-    $features = [('ac_unit', 'text-accent-hyper-emerald', '4°C Cold-Chain Verified', 'Unbroken thermal monitoring from biodynamic harvest to doorstep.'), ('verified', 'text-accent-hyper-emerald', 'Zero Chemical Policy', 'Laboratory mass-spectrometry verified free of synthetic residues.'), ('bolt', 'text-accent-electric-lime', 'Sub-2hr Metro Dispatch', 'Autonomous electric refrigeration fleet with biological sealing.'), ('support_agent', 'text-accent-hyper-emerald', 'Biological Sommelier 24/7', 'Nutritional architects on-call for harvest optimization and regimens.')];
+    $features = [
+    ['ac_unit', 'text-accent-hyper-emerald', '4°C Cold-Chain Verified', 'Unbroken thermal monitoring from biodynamic harvest to doorstep.'],
+    ['verified', 'text-accent-hyper-emerald', 'Zero Chemical Policy', 'Laboratory mass-spectrometry verified free of synthetic residues.'],
+    ['bolt', 'text-accent-electric-lime', 'Sub-2hr Metro Dispatch', 'Autonomous electric refrigeration fleet with biological sealing.'],
+    ['support_agent', 'text-accent-hyper-emerald', 'Biological Sommelier 24/7', 'Nutritional architects on-call for harvest optimization and regimens.'],
+];
     $footerCols = ['Inventory' => ['Living Botanicals', 'Raw Cold-Pressed', 'Demeter Biodynamics', 'Artisanal Cultures'], 'Verification' => ['Mass Spectrometry Logs', 'Thermal Telemetry', 'Soil Microbiome Data', 'Farm Origin Ledger'], 'Client Services' => ['Concierge Dispatch', 'Regimen Subscriptions', 'Cellar & Vault Storage', 'Private Harvest Allocation']];
 @endphp
 <footer class="w-full bg-surface-carbon mt-space-xl">

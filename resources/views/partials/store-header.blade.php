@@ -1,7 +1,7 @@
 @php
     // Replace '#' with route('...') once those pages exist.
     $storeNav = [
-        ['label' => 'Departments',       'href' => '#'],
+        ['label' => 'Departments',       'href' => route('catalog.index')],
         ['label' => 'Biodynamic Vault',  'href' => '#'],
         ['label' => 'Traceability',      'href' => '#'],
     ];
@@ -21,11 +21,11 @@
         </div>
 
         <div class="flex-1 max-w-md hidden md:block">
-            <div class="relative flex items-center bg-surface-slate rounded-lg px-space-md py-space-xs">
+            <form action="{{ route('catalog.index') }}" method="GET" role="search" class="relative flex items-center bg-surface-slate rounded-lg px-space-md py-space-xs">
                 <span class="material-symbols-outlined text-outline text-[18px] mr-space-sm">search</span>
-                <input class="w-full bg-transparent font-body-sm text-body-sm text-text-crisp placeholder:text-text-muted focus:outline-none" placeholder="Search ultra-pure biologicals, botanicals..." type="text"/>
+                <input class="w-full bg-transparent font-body-sm text-body-sm text-text-crisp placeholder:text-text-muted focus:outline-none" name="q" value="{{ is_string(request()->query('q')) ? request()->query('q') : '' }}" maxlength="100" placeholder="Search products..." type="search"/>
                 <div class="flex items-center gap-1 bg-surface-elevated px-1.5 py-0.5 rounded text-outline font-label-sm text-label-sm"><span>⌘</span><span>K</span></div>
-            </div>
+            </form>
         </div>
 
         <div class="flex items-center gap-space-md">

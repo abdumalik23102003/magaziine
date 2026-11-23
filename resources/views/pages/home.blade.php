@@ -12,17 +12,8 @@
 @endpush
 
 @section('content')
-{{-- Demo data (keyingi bosqichda bazadan keladi). Mahsulotlar controllerdan: $featured, $discounted --}}
+{{-- Bazadan: $featured, $discounted, $categories (HomeController). Pastdagilar hali demo. --}}
 @php
-    $categories = [
-        ['name' => 'Fruits & Veges',    'icon' => 'icon-vegetables-broccoli.png',        'count' => 48],
-        ['name' => 'Breads & Sweets',   'icon' => 'icon-bread-baguette.png',             'count' => 26],
-        ['name' => 'Meat & Poultry',    'icon' => 'icon-animal-products-drumsticks.png', 'count' => 19],
-        ['name' => 'Soft Drinks',       'icon' => 'icon-soft-drinks-bottle.png',         'count' => 31],
-        ['name' => 'Herbs & Flour',     'icon' => 'icon-bread-herb-flour.png',           'count' => 22],
-        ['name' => 'Wine & Spirits',    'icon' => 'icon-wine-glass-bottle.png',          'count' => 14],
-    ];
-
     $banners = [
         ['img' => 'foodmart/images/ad-image-1.png', 'kicker' => 'Up to 20% off',  'title' => 'Fresh Fruits & Veggie Bags',  'glow' => '0,245,155'],
         ['img' => 'foodmart/images/ad-image-2.png', 'kicker' => 'Baked at dawn',   'title' => 'Artisan Breads & Baskets',    'glow' => '245,158,11'],
@@ -41,20 +32,25 @@
     @include('partials.home-trust')
     @include('partials.home-categories')
 
-    @include('partials.home-products', [
-        'eyebrow' => 'Direct from Farm', 'title' => 'Weekly Featured Harvest',
-        'sub' => 'Hand-picked seasonal fruits and vegetables selected for peak vitamin density',
-        'cta' => 'View all',
-        'items' => $featured,
-    ])
+    @if ($featured->isNotEmpty())
+        @include('partials.home-products', [
+            'eyebrow' => 'Direct from Farm', 'title' => 'Weekly Featured Harvest',
+            'sub' => 'Hand-picked seasonal fruits and vegetables selected for peak vitamin density',
+            'cta' => 'View all', 'href' => route('catalog.index'),
+            'items' => $featured,
+        ])
+    @endif
 
     @include('partials.home-banners')
 
-    @include('partials.home-products', [
-        'eyebrow' => 'On sale', 'title' => 'Discounted Picks',
-        'sub' => 'Great prices on customer favourites',
-        'cta' => 'Shop deals', 'items' => $discounted, 'cols' => 'lg:grid-cols-4',
-    ])
+    @if ($discounted->isNotEmpty())
+        @include('partials.home-products', [
+            'eyebrow' => 'On sale', 'title' => 'Discounted Picks',
+            'sub' => 'Great prices on customer favourites',
+            'cta' => 'Shop deals', 'href' => route('catalog.index', ['discounted' => 1]),
+            'items' => $discounted,
+        ])
+    @endif
 
     @include('partials.home-blog')
     @include('partials.home-app')

@@ -13,6 +13,8 @@ return new class extends Migration
             $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
+            // public/foodmart/images ichidagi fayl nomi (masalan icon-bread-baguette.png)
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

@@ -21,11 +21,10 @@
 <div class="lg:col-span-2">
 <h5 class="font-display font-bold text-sm uppercase tracking-wider text-text-crisp mb-4">Shop</h5>
 <ul class="space-y-2.5 text-sm text-text-muted font-medium">
-<li><a class="hover:text-primary transition-colors" href="#">Fresh Vegetables</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Organic Fruits</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Dairy &amp; Eggs</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Artisan Breads</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Special Deals %</a></li>
+@foreach ($navCategories as $navCategory)
+<li><a class="hover:text-primary transition-colors" href="{{ route('catalog.category', $navCategory->slug) }}">{{ $navCategory->name }}</a></li>
+@endforeach
+<li><a class="hover:text-primary transition-colors" href="{{ route('catalog.index', ['discounted' => 1]) }}">Special Deals %</a></li>
 </ul>
 </div>
 <div class="lg:col-span-2">

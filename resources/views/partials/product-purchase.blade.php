@@ -1,25 +1,25 @@
-<div class="lg:col-span-5 flex flex-col gap-space-md" id="product-root" data-name="{{ $product['name'] }}" data-price="{{ $packs[0]['price'] }}">
+<div class="lg:col-span-5 flex flex-col gap-space-md" id="product-root" data-name="{{ $info['name'] }}" data-price="{{ $packs[0]['price'] }}">
 
     {{-- Title block --}}
     <div class="bg-surface-carbon p-space-lg rounded-xl shadow-lg flex flex-col gap-space-xs">
         <div class="flex items-center justify-between gap-space-xs">
-            <span class="font-label-md text-label-md uppercase tracking-wider text-accent-electric-lime font-semibold">{{ $product['farm'] }}</span>
-            <span class="px-2 py-0.5 rounded-full bg-accent-electric-lime/10 text-accent-electric-lime font-label-sm text-label-sm uppercase tracking-wider font-bold">-25% Peak Deal</span>
+            <span class="font-label-md text-label-md uppercase tracking-wider text-accent-electric-lime font-semibold">{{ $info['farm'] }}</span>
+            <span id="discount-badge" class="px-2 py-0.5 rounded-full bg-accent-electric-lime/10 text-accent-electric-lime font-label-sm text-label-sm uppercase tracking-wider font-bold {{ $packs[0]['badge'] ? '' : 'hidden' }}">{{ $packs[0]['badge'] }}</span>
         </div>
-        <h1 class="font-headline-lg text-headline-lg text-text-crisp font-semibold tracking-tight mt-1">{{ $product['name'] }}</h1>
-        <p class="font-body-md text-body-md text-on-surface-variant">{{ $product['tagline'] }}</p>
+        <h1 class="font-headline-lg text-headline-lg text-text-crisp font-semibold tracking-tight mt-1">{{ $info['name'] }}</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant">{{ $info['tagline'] }}</p>
         <div class="flex flex-wrap items-center gap-space-md pt-space-xs mt-space-xs">
             <div class="flex items-center gap-1.5">
-                <x-star-rating :rating="$product['rating']"/>
-                <span class="font-headline-sm text-label-lg text-text-crisp font-semibold">{{ $product['rating'] }}</span>
-                <a class="font-body-sm text-body-sm text-text-muted underline hover:text-accent-hyper-emerald transition-colors" href="#reviews">({{ $product['reviews'] }} verified logs)</a>
+                <x-star-rating :rating="$info['rating']"/>
+                <span class="font-headline-sm text-label-lg text-text-crisp font-semibold">{{ $info['rating'] }}</span>
+                <a class="font-body-sm text-body-sm text-text-muted underline hover:text-accent-hyper-emerald transition-colors" href="#reviews">({{ $info['reviews'] }} verified logs)</a>
             </div>
             <div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-slate text-accent-hyper-emerald font-label-sm text-label-sm uppercase tracking-wider"><span class="material-symbols-outlined text-[14px]">water_drop</span> Peak Brix 14.2° (Grade A+)</div>
         </div>
         <div class="flex items-baseline gap-space-sm pt-space-sm">
             <span class="font-display text-headline-lg text-accent-hyper-emerald font-bold tracking-tight" id="display-price">${{ number_format($packs[0]['price'], 2) }}</span>
-            <span class="font-headline-sm text-headline-sm text-text-muted line-through">${{ number_format($product['was'], 2) }}</span>
-            <span class="font-label-md text-label-md text-text-muted uppercase tracking-wider ml-auto" id="unit-price">${{ number_format($packs[0]['per'], 2) }} / unit</span>
+            <span id="old-price" class="font-headline-sm text-headline-sm text-text-muted line-through {{ $info['was'] ? '' : 'hidden' }}">{{ $info['was'] ? '$'.number_format($info['was'], 2) : '' }}</span>
+            <span class="font-label-md text-label-md text-text-muted uppercase tracking-wider ml-auto" id="unit-price">Per {{ $product->unit->name }}</span>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
             </div>
             <div class="grid grid-cols-3 gap-2" id="pack-options">
                 @foreach ($packs as $i => $p)
-                    <x-pack-option :key="$p['key']" :label="$p['label']" :name="$p['name']" :price="$p['price']" :per="$p['per']" :note="$p['note']" :active="$i === 0"/>
+                    <x-pack-option :key="$p['key']" :label="$p['label']" :name="$p['name']" :price="$p['price']" :per="$p['per']" :note="$p['note']" :old="$p['old']" :badge="$p['badge']" :active="$i === 0"/>
                 @endforeach
             </div>
         </div>

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +14,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['parent_id', 'name', 'slug'];
+    protected $fillable = ['parent_id', 'name', 'slug', 'icon'];
 
     public function parent(): BelongsTo
     {
@@ -28,21 +31,58 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
-    /** @return array<int, int> ids of all nested children, grandchildren, etc. */
-    public function descendantIds(): array
+    public function scopeRoots(Builder $query): void
     {
-        $all = [];
-        $level = [$this->getKey()];
+        $query->whereNull('parent_id');
+    }
 
-        while ($level !== []) {
-            $level = static::query()
-                ->whereIn('parent_id', $level)
-                ->pluck('id')
-                ->all();
+    protected function iconUrl(): Attribute
+    {
+        return Attribute::get(
+            fn () => asset('foodmart/images/'.($this->icon ?: 'icon-vegetables-broccoli.png'))
+        );
+    }
 
-            $all = [...$all, ...$level];
+    /** O'zining va bevosita bolalarining id lari: "Fruits" tanlansa ichidagilar ham chiqadi. */
+    public function branchIds(): array
+    {
+        return $this->children->pluck('id')->prepend($this->id)->all();
+    }
+
+    /** Breadcrumb uchun: eng yuqori ota -> ... -> shu kategoriya. */
+    public function trail(): Collection
+    {
+        $trail = new Collection;
+        $node = $this;
+
+        while ($node && ! $trail->contains('id', $node->id)) {
+            $trail->prepend($node);
+            $node = $node->parent;
         }
 
-        return $all;
+        return $trail->values();
+    }
+
+    /** Bosh sahifa uchun: asosiy kategoriyalar va ulardagi (bolalari bilan) faol mahsulotlar soni. */
+    public static function rootsWithCounts(): Collection
+    {
+        $roots = static::query()
+            ->roots()
+            ->with('children:id,parent_id')
+            ->orderBy('name')
+            ->get();
+
+        $counts = Product::query()
+            ->active()
+            ->has('activeVariants')
+            ->selectRaw('category_id, COUNT(*) AS total')
+            ->groupBy('category_id')
+            ->pluck('total', 'category_id');
+
+        foreach ($roots as $root) {
+            $root->setAttribute('items_count', (int) $counts->only($root->branchIds())->sum());
+        }
+
+        return $roots;
     }
 }

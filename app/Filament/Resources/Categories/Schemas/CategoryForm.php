@@ -25,6 +25,10 @@ class CategoryForm
                     ->required()
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
+                TextInput::make('icon')
+                    ->maxLength(255)
+                    ->placeholder('icon-bread-baguette.png')
+                    ->helperText('public/foodmart/images ichidagi fayl nomi (bo\'sh qoldirsa standart ikonka chiqadi).'),
                 Select::make('parent_id')
                     ->label('Parent category')
                     ->relationship(

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -40,5 +41,17 @@ class HomePageTest extends TestCase
 
         $this->assertSame('7.50', $variant->final_price);
         $this->assertTrue($variant->has_discount);
+    }
+
+    public function test_home_page_links_cards_and_categories(): void
+    {
+        $category = Category::factory()->create(['name' => 'Fruits', 'slug' => 'fruits']);
+        $product = Product::factory()->create(['category_id' => $category->id, 'slug' => 'linked-product']);
+        ProductVariant::factory()->for($product)->create();
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee(route('products.show', 'linked-product'), false)
+            ->assertSee(route('catalog.category', 'fruits'), false);
     }
 }
