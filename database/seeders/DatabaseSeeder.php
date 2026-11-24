@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -18,8 +19,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@magaziine.test',
             'password' => 'password',
-            'is_admin' => true,
+            'role' => UserRole::Admin,
         ]);
+
+        foreach (['moderator', 'operator', 'partner'] as $state) {
+            User::factory()->{$state}()->create([
+                'name' => ucfirst($state),
+                'email' => "{$state}@magaziine.test",
+                'password' => 'password',
+            ]);
+        }
 
         $units = [
             'kg' => Unit::create(['name' => 'Kilogram', 'short_name' => 'kg']),

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserRole;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -16,7 +17,7 @@ class AdminPanelTest extends TestCase
     private function admin(): User
     {
         $user = User::factory()->create();
-        $user->forceFill(['is_admin' => true])->save();
+        $user->forceFill(['role' => UserRole::Admin])->save();
 
         return $user;
     }

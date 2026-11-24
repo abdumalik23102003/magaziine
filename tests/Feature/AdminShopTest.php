@@ -14,7 +14,7 @@ class AdminShopTest extends TestCase
     private function admin(): User
     {
         $user = User::factory()->create();
-        $user->forceFill(['is_admin' => true])->save();
+        $user->forceFill(['role' => 'admin'])->save();
 
         return $user;
     }

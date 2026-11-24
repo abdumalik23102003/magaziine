@@ -42,10 +42,10 @@ class ProfileTest extends TestCase
         $this->actingAs($user)->put('/profile', [
             'name' => $user->name,
             'email' => $user->email,
-            'is_admin' => 1,
+            'role' => 'admin',
         ]);
 
-        $this->assertFalse((bool) $user->fresh()->is_admin);
+        $this->assertFalse($user->fresh()->isAdmin());
     }
 
     public function test_email_must_stay_unique(): void

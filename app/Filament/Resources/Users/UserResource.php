@@ -2,24 +2,33 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Filament\Resources\Users\Pages\CreateUser;
+use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-/** Mijozlar ro'yxati (faqat ko'rish: parol va admin huquqi bu yerdan o'zgarmaydi). */
+/** Foydalanuvchilar, rollar va hamkor-brend biriktirish (faqat admin; UserPolicy). */
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationLabel = 'Customers';
+    protected static ?string $navigationLabel = 'Users';
 
-    protected static ?string $pluralModelLabel = 'Customers';
+    protected static ?string $pluralModelLabel = 'Users';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+    public static function form(Schema $schema): Schema
+    {
+        return UserForm::configure($schema);
+    }
 
     public static function table(Table $table): Table
     {
@@ -30,11 +39,8 @@ class UserResource extends Resource
     {
         return [
             'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
-    }
-
-    public static function canCreate(): bool
-    {
-        return false;
     }
 }

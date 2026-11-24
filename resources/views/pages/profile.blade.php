@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="flex items-center gap-2">
-        @if ($user->is_admin)
+        @if ($user->isStaff())
             <a href="{{ url('/admin') }}" class="rounded-full border border-border-glass px-5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-text-muted hover:text-primary hover:border-primary/40 transition-colors">Admin panel</a>
         @endif
         <form method="POST" action="{{ route('logout') }}">

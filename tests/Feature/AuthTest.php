@@ -24,7 +24,7 @@ class AuthTest extends TestCase
         ])->assertRedirect('/');
 
         $this->assertAuthenticated();
-        $this->assertDatabaseHas('users', ['email' => 'ali@example.test', 'is_admin' => false]);
+        $this->assertDatabaseHas('users', ['email' => 'ali@example.test', 'role' => 'customer']);
     }
 
     public function test_register_validation(): void
@@ -48,10 +48,10 @@ class AuthTest extends TestCase
             'email' => 'sneaky@example.test',
             'password' => 'secret-pass-1',
             'password_confirmation' => 'secret-pass-1',
-            'is_admin' => 1,
+            'role' => 'admin',
         ]);
 
-        $this->assertFalse((bool) User::where('email', 'sneaky@example.test')->first()->is_admin);
+        $this->assertFalse(User::where('email', 'sneaky@example.test')->first()->isAdmin());
     }
 
     public function test_login_and_logout(): void

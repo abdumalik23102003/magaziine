@@ -2,36 +2,71 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+/** role va is_active ataylab $fillable da yo'q: oddiy forma orqali o'zgarmasin. */
+#[Fillable(['name', 'email', 'password', 'phone', 'address'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $attributes = [
+        'role' => 'customer',
+        'is_active' => true,
+    ];
+
+    /** @var array<int, int>|null */
+    protected ?array $brandIdsCache = null;
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_admin' => 'boolean',
+            'role' => UserRole::class,
+            'is_active' => 'boolean',
         ];
     }
 
-    /** is_admin ataylab $fillable da yo'q: oddiy forma orqali admin bo'lib bo'lmasin. */
+    public function hasRole(UserRole ...$roles): bool
+    {
+        return in_array($this->role, $roles, true);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(UserRole::Admin);
+    }
+
+    /** Admin panelga kira oladigan xodimlar. */
+    public function isStaff(): bool
+    {
+        return $this->hasRole(UserRole::Admin, UserRole::Moderator, UserRole::Operator);
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
-        return (bool) $this->is_admin;
+        if (! $this->is_active) {
+            return false;
+        }
+
+        return match ($panel->getId()) {
+            'admin' => $this->isStaff(),
+            'partner' => $this->hasRole(UserRole::Partner, UserRole::Admin),
+            default => false,
+        };
     }
 
     public function carts(): HasMany
@@ -42,5 +77,22 @@ class User extends Authenticatable implements FilamentUser
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /** Hamkor boshqaradigan brendlar. */
+    public function brands(): BelongsToMany
+    {
+        return $this->belongsToMany(Brand::class)->withTimestamps();
+    }
+
+    public function ownsBrand(?int $brandId): bool
+    {
+        if ($brandId === null) {
+            return false;
+        }
+
+        $this->brandIdsCache ??= $this->brands()->pluck('brands.id')->map(fn ($id): int => (int) $id)->all();
+
+        return in_array($brandId, $this->brandIdsCache, true);
     }
 }

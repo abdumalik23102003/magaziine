@@ -11,6 +11,12 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ShopStats extends StatsOverviewWidget
 {
+    /** Daromad va statistika faqat adminga. */
+    public static function canView(): bool
+    {
+        return (bool) auth()->user()?->isAdmin();
+    }
+
     protected function getStats(): array
     {
         $revenue = Order::query()
@@ -21,7 +27,7 @@ class ShopStats extends StatsOverviewWidget
             Stat::make('Pending orders', Order::query()->where('status', OrderStatus::Pending->value)->count()),
             Stat::make('Revenue', '$'.number_format((float) $revenue, 2))
                 ->description('Without cancelled orders'),
-            Stat::make('Customers', User::query()->where('is_admin', false)->count()),
+            Stat::make('Customers', User::query()->where('role', 'customer')->count()),
             Stat::make('Out of stock variants', ProductVariant::query()->where('is_active', true)->where('stock', '<', 1)->count()),
         ];
     }
