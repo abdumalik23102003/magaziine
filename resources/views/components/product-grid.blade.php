@@ -7,6 +7,7 @@
 
         <x-product-card
             :id="$variant->id"
+            :product-id="$product->id"
             :href="route('products.show', $product->slug)"
             :img="$product->mainImage?->url"
             :category="$product->category->name"

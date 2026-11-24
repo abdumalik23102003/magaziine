@@ -1,44 +1,78 @@
-@extends('layouts.store')
+@extends('layouts.app')
 
-@section('title', 'FoodMart - My Profile')
-
-@push('scripts')
-    <script src="{{ asset('js/pages/profile.js') }}"></script>
-@endpush
+@section('title', 'My profile - FoodMart')
 
 @section('content')
-@php
-    // Temporary demo data - later pass these from a controller (auth user, orders, addresses...).
-    $user = ['name' => 'Alexander Vance', 'handle' => '@alex.vance', 'node' => 'Node 04 San Francisco (Pacific Vault)', 'bio_key' => '#FM-9842-OB', 'since' => 'Oct 2023', 'orders' => 48, 'credits' => '34.50', 'avatar' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuCc-_mHbsXpyQpZCtcDflkQj5w7ZKxB640hAA72X7l33aHErzWuAs70Zzxng1onav-mud_2ozdsf66-prA5sLVwUrq2kqBhv9j5EalkwdxxEGoW9QDig6Zi7tduSSl99DJsfh3bJQduXs9kRoRx9BW5UnPsscP-qIkwanNT499RdxG-ubq-fjN4QuoVrUYI6YgYwD88tEieXGgZ5E9QMwbjvJPt-JzAKV1L_9_NXoo'];
-    $payload = [['name' => 'Hass Avocados', 'meta' => '4x • Sonoma', 'img' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuDX55aabs56jIA4VGkOUmYLu57ehqFE5V-oE7EIUoYRwyJSRLgN1PUCJIJfRGEIaN2ctebm8w4CVHC9IDRixsoNBuBuAjtKtFePZFc7E_jaAyipGYSQRCKQkZXlX9s3w5-d2eloR3PmPJniDcs_yPzi7IL5ald7V0dD5xeoWkJZjZqSplG5ffFrWTZDzc9DlJQ39toiD--pQQM5QQPxXLjbodOQzpACqo2c_lUB_JU', 'alt' => 'Macro cinematic shot of organic Hass avocados with rich textured dark green skin glistening in pristine laboratory lighting on black granite background'], ['name' => 'Alpine Strawberries', 'meta' => '250g • Big Sur', 'img' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZKd6vVy2PLWXVlVoimRSXjWvpNusfUcDukBZRBLXItn9ekJP76A21erdCDrUgjLVGoJ1GQkcZnEvhb7b1fOh9VhytorqqrIol06ieEG8C0eKrBjS6TslnE6gtFFiA94v5L2FsVfIZ0Qlzjlpo2Hn2On76RTBVQrWvUzrZHnCaDXAnGD-60K5vac3pjiA-Kx7xdErdtgLVx0dpSy5bfI6z76lJABcPVNCtXo0ogzA', 'alt' => 'Exquisite macro shot of wild Alpine strawberries glowing in vibrant red against pure obsidian background with fresh water dewdrops'], ['name' => 'Romanesco Crown', 'meta' => '1 Head • Salinas', 'img' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuDXZ0SNkELt9_W7UMk9eoLTCrmFBeLMVQKEBf0vAbPRzSrCsevwQEHH0DP-fNlein5LB1k3QV77kb_mo4RRsuadeRFe5JVoYpaqyg3ZVlFvLymfhQnE1bxleOMWhLstKoyuZ2fl0pM6m6-r3Ju5qz6rSLbuDgvLAJiDQDOnuIAGvWt_k8FyDcslPrjiBQ2tEMKBDGhsn5D0bhkujQz6Vf4UkI5eTCLinAKF3JESln0', 'alt' => 'Crisp freshly harvested organic Romanesco broccoli with geometric spiral florets displayed on dark slate with soft neon biological lighting'], ['name' => 'Valencia Oranges', 'meta' => '1.5kg • Ojai Grove', 'img' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuByOgF0x0IZoCnzePUxmtKP9DJ73PUztL_wIxQGHkDh-csfnaT4qX-79IcPCgBtm78Q6oewEtp_WuNsa6z6oXDoSNi91gqc2VLRS4FNwBzdm_2mBoVblvSIcsRbKvBgimbHuHM6q_2upGwKVTquh-08wJq30yMQfTWQpTDsn4RqzVklUg7szdYoZyHQO3WGOuhhGDTo5oFOhAnO1uDgIE4Wqt1jFqCNEx8lVlQ8OpU', 'alt' => 'High contrast cut citrus heirloom Valencia orange slice showing crystalline pulp vessels floating over dark reflective obsidian surface']];
-    $orders = [['number' => 'FM-87412', 'status' => 'Delivered Yesterday', 'total' => '42.10', 'items' => 6, 'summary' => 'Mycelium Insulated Tote Retained for Recycling', 'variance' => '±0.2°C Max Dev', 'origin' => 'Marin Demeter Ranch'], ['number' => 'FM-86094', 'status' => 'Delivered 4 Days Ago', 'total' => '28.50', 'items' => 4, 'summary' => 'Cold-Pressed Greens & Raw Micro-Algae', 'variance' => '0.0°C Absolute', 'origin' => 'Central Coast Cellars'], ['number' => 'FM-84310', 'status' => 'Delivered 12 Days Ago', 'total' => '64.80', 'items' => 8, 'summary' => 'Biodynamic Botanical Pantry & Raw Ferments', 'variance' => '±0.1°C Max Dev', 'origin' => 'Napa Demeter Collective']];
-    $address = ['street' => '742 Montgomery St', 'suite' => 'Penthouse Suite 14B', 'city' => 'San Francisco, CA 94111', 'note' => 'Leave with 14th floor concierge or place inside thermal mycelium cold tote bag at apartment doorway. Ring unit chime once.'];
-    $standards = ['100% Demeter Biodynamic', 'Zero Synthetic Pesticides', 'Gluten-Free Bakery Only', 'Low-Sugar Citrus', 'High Polyphenol Olive Oils'];
-    $allergens = ['Peanut-Free Verified', 'Shellfish Cross-Contam Shield'];
-    $impact = ['done' => 21, 'goal' => 25, 'percent' => 84];
-@endphp
+<x-breadcrumbs :items="[['label' => 'Home', 'url' => route('home')], ['label' => 'Profile', 'url' => null]]" />
 
-<div class="flex flex-col w-full text-on-surface">
-<div class="relative w-full overflow-hidden">
-    {{-- Top ambient glows --}}
-    <div class="absolute -top-40 left-1/4 w-[600px] h-[350px] bg-accent-hyper-emerald/5 rounded-full blur-[140px] pointer-events-none"></div>
-    <div class="absolute -top-20 right-10 w-[420px] h-[280px] bg-accent-electric-lime/5 rounded-full blur-[120px] pointer-events-none"></div>
-
-    <div class="max-w-[1600px] mx-auto px-margin-mobile md:px-margin py-space-lg w-full flex flex-col gap-space-lg">
-        @include('partials.profile-hero')
-        @include('partials.profile-tabs')
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
-            {{-- LEFT: orders and telemetry --}}
-            <div class="lg:col-span-8 flex flex-col gap-space-lg">
-                @include('partials.profile-dispatch')
-                @include('partials.profile-orders')
-                @include('partials.profile-presets')
-            </div>
-            {{-- RIGHT: preferences and security --}}
-            @include('partials.profile-sidebar')
+<section class="mt-6 dark-glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="flex items-center gap-5">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-accent-lime flex items-center justify-center font-display font-black text-3xl text-black shadow-[0_0_24px_rgba(0,245,155,0.3)]">
+            {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
+        </div>
+        <div>
+            <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-text-crisp">{{ $user->name }}</h1>
+            <p class="text-sm text-text-muted">{{ $user->email }} &middot; member since {{ $user->created_at->format('M Y') }}</p>
         </div>
     </div>
+    <div class="flex items-center gap-2">
+        @if ($user->is_admin)
+            <a href="{{ url('/admin') }}" class="rounded-full border border-border-glass px-5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-text-muted hover:text-primary hover:border-primary/40 transition-colors">Admin panel</a>
+        @endif
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="rounded-full border border-red-400/40 px-5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-red-300 hover:bg-red-500/10 transition-colors">Sign out</button>
+        </form>
+    </div>
+</section>
+
+<div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <x-profile-stat label="Orders" icon="inventory_2" :value="$stats['orders']" sub="All time" />
+    <x-profile-stat label="Total spent" icon="payments" icon-class="text-accent-electric-lime" :value="'$'.$stats['spent']" sub="Without cancelled orders" />
+    <x-profile-stat label="Saved items" icon="favorite" :value="$stats['saved']" sub="In your favorites" />
 </div>
+
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <section class="lg:col-span-7 dark-glass-card rounded-3xl p-6">
+        <h2 class="font-display font-bold text-xl text-text-crisp">My orders</h2>
+
+        @if ($orders->isNotEmpty())
+            <div class="mt-2 divide-y divide-border-glass">
+                @foreach ($orders as $order)
+                    <x-profile-order :order="$order" />
+                @endforeach
+            </div>
+            {{ $orders->links() }}
+        @else
+            <p class="mt-4 text-sm text-text-muted">No orders yet. <a href="{{ route('catalog.index') }}" class="font-bold text-primary hover:underline">Start shopping</a></p>
+        @endif
+    </section>
+
+    <div class="lg:col-span-5 space-y-6">
+        <section class="dark-glass-card rounded-3xl p-6">
+            <h2 class="font-display font-bold text-xl text-text-crisp mb-5">Profile details</h2>
+            <form method="POST" action="{{ route('profile.update') }}" class="space-y-4">
+                @csrf
+                @method('PUT')
+                <x-field name="name" label="Full name" :value="$user->name" autocomplete="name" required />
+                <x-field name="email" label="Email" type="email" :value="$user->email" autocomplete="email" required />
+                <x-field name="phone" label="Phone" type="tel" :value="$user->phone" autocomplete="tel" />
+                <x-field name="address" label="Default address" :value="$user->address" autocomplete="street-address" />
+                <button type="submit" class="water-ripple-target rounded-full bg-primary hover:bg-emerald-400 px-6 py-2.5 font-display text-xs font-bold uppercase tracking-wider text-black transition-colors">Save changes</button>
+            </form>
+        </section>
+
+        <section class="dark-glass-card rounded-3xl p-6">
+            <h2 class="font-display font-bold text-xl text-text-crisp mb-5">Change password</h2>
+            <form method="POST" action="{{ route('profile.password') }}" class="space-y-4">
+                @csrf
+                @method('PUT')
+                <x-field name="current_password" label="Current password" type="password" autocomplete="current-password" required />
+                <x-field name="password" label="New password" type="password" autocomplete="new-password" required />
+                <x-field name="password_confirmation" label="Repeat new password" type="password" autocomplete="new-password" required />
+                <button type="submit" class="water-ripple-target rounded-full border border-primary/40 bg-primary/10 hover:bg-primary hover:text-black px-6 py-2.5 font-display text-xs font-bold uppercase tracking-wider text-primary transition-colors">Update password</button>
+            </form>
+        </section>
+    </div>
 </div>
 @endsection

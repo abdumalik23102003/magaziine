@@ -1,9 +1,9 @@
-@props(['id', 'emoji' => '🛒', 'img' => null, 'glow' => '0,245,155', 'category', 'title', 'rating' => 5, 'reviews' => 0, 'price', 'oldPrice' => null, 'badge' => null, 'href' => null])
+@props(['id', 'productId' => null, 'emoji' => '🛒', 'img' => null, 'glow' => '0,245,155', 'category', 'title', 'rating' => 5, 'reviews' => 0, 'price', 'oldPrice' => null, 'badge' => null, 'href' => null])
 
-<div class="dark-glass-card rounded-3xl p-5 flex flex-col group" data-product-id="{{ $id }}" data-name="{{ $title }}" data-price="{{ $price }}" data-emoji="{{ $emoji }}" data-img="{{ $img ? asset($img) : '' }}" data-glow="{{ $glow }}" data-category="{{ $category }}">
+{{-- data-product-id = VARIANT id (savatga shu qo'shiladi). data-wishlist-id = mahsulot id. --}}
+<div class="dark-glass-card rounded-3xl p-5 flex flex-col group" data-product-id="{{ $id }}" data-name="{{ $title }}" data-price="{{ $price }}" data-category="{{ $category }}">
     <div class="relative w-full aspect-square rounded-2xl bg-surface-obsidian/75 border border-border-glass flex items-center justify-center text-6xl group-hover:scale-[1.02] transition-transform overflow-hidden mb-5">
         @if ($href)
-            {{-- Butun rasm maydoni mahsulot sahifasiga havola (tugmalar uning ustida turadi) --}}
             <a href="{{ $href }}" class="absolute inset-0" aria-label="{{ $title }}"></a>
         @endif
         @if ($badge)
@@ -11,12 +11,14 @@
                 {{ $badge }}
             </span>
         @endif
-        <button class="water-ripple-target absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-carbon/80 border border-border-glass text-zinc-400 hover:text-red-400 hover:border-red-400/40 flex items-center justify-center transition-colors" type="button" aria-label="Add to favourites">
-            <i class="bi bi-heart text-xs"></i>
-        </button>
+        @if ($productId)
+            <button class="wishlist-toggle water-ripple-target absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-carbon/80 border border-border-glass text-zinc-400 hover:text-red-400 hover:border-red-400/40 flex items-center justify-center transition-colors" type="button" data-wishlist-id="{{ $productId }}" aria-label="Save to favorites" aria-pressed="false">
+                <i class="bi bi-heart text-xs"></i>
+            </button>
+        @endif
         @if ($img)
             {{-- .png = cut-out on transparent background -> contain; .jpg = full photo -> cover --}}
-            <img src="{{ asset($img) }}" alt="{{ $title }}" loading="lazy"
+            <img src="{{ $img }}" alt="{{ $title }}" loading="lazy"
                  class="w-full h-full {{ str_ends_with($img, '.png') ? 'object-contain p-6 drop-shadow-[0_12px_20px_rgba(0,0,0,0.45)]' : 'object-cover' }}">
         @else
             <span class="filter drop-shadow-[0_10px_20px_rgba({{ $glow }},0.2)]">{{ $emoji }}</span>

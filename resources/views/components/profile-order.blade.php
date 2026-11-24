@@ -1,25 +1,20 @@
-@props(['number', 'status', 'recent' => false, 'total', 'items', 'summary', 'variance', 'origin'])
+@props(['order'])
 
-<div class="py-space-md flex flex-col md:flex-row md:items-center justify-between gap-space-md group">
-    <div class="flex items-start gap-space-md">
-        <div class="w-12 h-12 rounded-xl bg-surface-slate flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-accent-hyper-emerald text-[24px]">task_alt</span>
+<div class="py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('orders.show', $order) }}" class="font-display font-bold text-text-crisp hover:text-primary transition-colors">Order {{ $order->number }}</a>
+            <span class="px-2 py-0.5 rounded-full border text-[10px] font-mono font-bold uppercase tracking-wider {{ $order->status->badgeClass() }}">{{ $order->status->label() }}</span>
         </div>
-        <div>
-            <div class="flex items-center gap-space-xs flex-wrap">
-                <span class="font-title text-title text-text-crisp font-semibold">Order #{{ $number }}</span>
-                <span class="font-label-sm text-label-sm px-2 py-0.5 rounded font-semibold uppercase {{ $recent ? 'bg-accent-hyper-emerald/10 text-accent-hyper-emerald' : 'bg-surface-slate text-on-surface-variant' }}">{{ $status }}</span>
-            </div>
-            <div class="font-body-sm text-body-sm text-text-muted mt-1">${{ $total }} • {{ $items }} items • <span class="text-on-surface-variant">{{ $summary }}</span></div>
-            <div class="font-label-sm text-label-sm text-outline mt-1">Cold-Chain Variance: <strong class="text-text-crisp font-normal">{{ $variance }}</strong> • Origin: {{ $origin }}</div>
-        </div>
+        <p class="mt-1 text-xs font-mono text-text-muted">
+            {{ $order->created_at->format('d M Y, H:i') }} &middot; {{ $order->items_count }} {{ $order->items_count == 1 ? 'item' : 'items' }} &middot; <span class="text-text-crisp font-bold">${{ $order->total_price }}</span>
+        </p>
     </div>
-    <div class="flex items-center gap-space-xs shrink-0 self-end md:self-center">
-        <button class="font-label-md text-label-md uppercase tracking-wider px-3 py-1.5 rounded-lg bg-surface-slate hover:bg-surface-elevated text-on-surface-variant hover:text-text-crisp transition-colors flex items-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">receipt_long</span><span>View Digital Slip</span>
-        </button>
-        <button class="font-label-md text-label-md uppercase tracking-wider px-3 py-1.5 rounded-lg bg-surface-slate hover:bg-accent-hyper-emerald hover:text-surface-obsidian text-accent-hyper-emerald font-semibold transition-all flex items-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">replay</span><span>Reorder All</span>
-        </button>
+    <div class="flex items-center gap-2 shrink-0">
+        <a href="{{ route('orders.show', $order) }}" class="rounded-full border border-border-glass px-4 py-2 text-[11px] font-mono font-bold uppercase tracking-wider text-text-muted hover:text-text-crisp hover:border-primary/40 transition-colors">Details</a>
+        <form method="POST" action="{{ route('orders.reorder', $order) }}">
+            @csrf
+            <button type="submit" class="rounded-full bg-primary/10 border border-primary/30 px-4 py-2 text-[11px] font-mono font-bold uppercase tracking-wider text-primary hover:bg-primary hover:text-black transition-colors">Reorder</button>
+        </form>
     </div>
 </div>

@@ -1,203 +1,160 @@
-// Shopping-cart drawer. Exposes window.FoodMartCart = { add(product, qty), open(), close() }
+// Server-backed shopping-cart drawer.
+// window.FoodMartCart = { add(variantId, qty), set(variantId, qty), remove(variantId), clear(), open(), close(), setState(cart), state() }
 (function () {
-  const cartDrawer = document.getElementById('cart-drawer');
-  if (!cartDrawer) return;
+  const fm = window.FoodMart;
+  const drawer = document.getElementById('cart-drawer');
+  if (!fm || !drawer) return;
 
-  const cartBackdrop = document.getElementById('cart-backdrop');
-  const cartToggleBtn = document.getElementById('cart-toggle-btn');
-  const cartCloseBtn = document.getElementById('cart-close-btn');
-  const cartContinueBtn = document.getElementById('cart-continue-btn');
-  const cartClearAllBtn = document.getElementById('cart-clear-all-btn');
-  const cartShopNowBtn = document.getElementById('cart-shop-now-btn');
-  const navCartBadge = document.getElementById('nav-cart-count');
-  const cartDrawerCount = document.getElementById('cart-drawer-count');
-  const itemsContainer = document.getElementById('cart-items-container');
-  const emptyState = document.getElementById('cart-empty-state');
-  const cartFooter = document.getElementById('cart-footer');
-  const subtotalEl = document.getElementById('cart-subtotal');
-  const taxEl = document.getElementById('cart-tax');
-  const totalValueEl = document.getElementById('cart-total-value');
-  const checkoutBtn = document.getElementById('cart-checkout-btn');
-  const checkoutLabel = document.getElementById('cart-checkout-label');
-  const progressBar = document.getElementById('cart-progress-bar');
-  const deliveryText = document.getElementById('cart-delivery-text');
-  const template = document.getElementById('cart-item-template');
+  const $ = (id) => document.getElementById(id);
+  const backdrop = $('cart-backdrop');
+  const list = $('cart-items-list');
+  const emptyState = $('cart-empty-state');
+  const footer = $('cart-footer');
+  const clearBtn = $('cart-clear-all-btn');
+  const badge = $('nav-cart-count');
 
-  const FREE_DELIVERY_FROM = 35;
+  let state = fm.cart || { items: [], count: 0 };
+  let busy = false;
 
-  function calculateCart(pulseBadge) {
-    const items = document.querySelectorAll('.cart-item');
-    let subtotal = 0;
-    let totalItemsCount = 0;
+  function rowHtml(i) {
+    const e = fm.escape;
+    const thumb = i.img
+      ? `<img class="w-full h-full object-contain p-1.5" src="${e(i.img)}" alt="${e(i.name)}" loading="lazy">`
+      : '<span class="text-3xl">🛒</span>';
+    const tag = i.discount > 0
+      ? `<span class="inline-flex text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent-lime/15 text-accent-lime border border-accent-lime/30">-${i.discount}%</span>`
+      : '<span class="inline-flex text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">In stock</span>';
+    const old = i.old_price ? `<span class="text-[11px] text-zinc-500 line-through ml-1">$${e(i.old_price)}</span>` : '';
+    return `
+      <div class="cart-item group relative p-4 rounded-2xl bg-surface-obsidian/75 border border-white/10 hover:border-primary/40 transition-all" data-variant-id="${i.id}">
+        <div class="flex items-start gap-4">
+          <a href="${e(i.url)}" class="w-16 h-16 rounded-xl bg-surface-carbon border border-white/10 flex items-center justify-center flex-shrink-0 overflow-hidden">${thumb}</a>
+          <div class="flex-1 min-w-0 pr-6">
+            <div class="flex items-center gap-2 mb-1">${tag}<span class="text-[10px] text-zinc-400 font-mono truncate">${e(i.variant)}</span></div>
+            <a href="${e(i.url)}" class="block font-display font-bold text-sm text-text-crisp truncate hover:text-primary transition-colors">${e(i.name)}</a>
+            <p class="text-xs text-text-muted mt-0.5">$${e(i.price)}${old}</p>
+            <div class="flex items-center justify-between mt-3">
+              <div class="inline-flex items-center rounded-lg bg-surface-carbon border border-border-glass p-0.5">
+                <button type="button" class="cart-step w-6 h-6 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 text-xs" data-delta="-1" aria-label="Decrease"><i class="bi bi-dash"></i></button>
+                <span class="w-7 text-center font-mono font-bold text-xs text-text-crisp">${i.qty}</span>
+                <button type="button" class="cart-step w-6 h-6 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 text-xs" data-delta="1" aria-label="Increase"><i class="bi bi-plus"></i></button>
+              </div>
+              <div class="font-display font-black text-sm text-text-crisp">$${e(i.line_total)}</div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="cart-remove absolute top-3 right-3 w-6 h-6 rounded-md text-zinc-500 hover:text-red-400 hover:bg-red-500/10 flex items-center justify-center" aria-label="Remove"><i class="bi bi-x-lg text-xs"></i></button>
+      </div>`;
+  }
 
-    items.forEach(item => {
-      const price = parseFloat(item.getAttribute('data-price') || '0');
-      const qtyEl = item.querySelector('.cart-item-qty');
-      const totalEl = item.querySelector('.cart-item-total');
-      const qty = parseInt(qtyEl ? qtyEl.textContent : '1', 10);
-      const itemSubtotal = price * qty;
+  function render(pulse) {
+    const items = state.items || [];
+    const empty = items.length === 0;
 
-      if (totalEl) totalEl.textContent = `$${itemSubtotal.toFixed(2)}`;
-      subtotal += itemSubtotal;
-      totalItemsCount += qty;
-    });
+    list.innerHTML = items.map(rowHtml).join('');
+    emptyState.classList.toggle('hidden', !empty);
+    emptyState.classList.toggle('flex', empty);
+    footer.classList.toggle('opacity-40', empty);
+    footer.classList.toggle('pointer-events-none', empty);
+    clearBtn.classList.toggle('opacity-40', empty);
+    clearBtn.classList.toggle('pointer-events-none', empty);
 
-    const tax = subtotal > 0 ? 1.25 : 0.00;
-    const finalTotal = subtotal + tax;
+    $('cart-drawer-count').textContent = `${state.count} ${state.count === 1 ? 'item' : 'items'}`;
+    $('cart-subtotal').textContent = '$' + (state.subtotal || '0.00');
+    $('cart-tax').textContent = '$' + (state.tax || '0.00');
+    $('cart-tax-row').classList.toggle('hidden', !state.tax_rate);
+    $('cart-total-value').textContent = '$' + (state.total || '0.00');
+    $('cart-checkout-label').textContent = `Proceed to Checkout ($${state.total || '0.00'})`;
+    $('cart-progress-bar').style.width = (state.progress || 0) + '%';
+    $('cart-delivery-text').textContent = state.qualifies || empty
+      ? (empty ? `Free delivery from $${state.free_from}` : 'Free delivery unlocked!')
+      : `Add $${state.remaining} more for free delivery`;
+    $('cart-delivery-value').textContent = state.qualifies ? 'FREE' : 'at checkout';
 
-    // Header badge (it has an inline display style, so toggle that instead of the 'hidden' class)
-    if (navCartBadge) {
-      navCartBadge.textContent = totalItemsCount;
-      navCartBadge.style.display = totalItemsCount === 0 ? 'none' : 'flex';
-      if (pulseBadge) {
-        navCartBadge.classList.add('scale-125');
-        setTimeout(() => navCartBadge.classList.remove('scale-125'), 180);
+    if (badge) {
+      badge.textContent = state.count;
+      badge.style.display = state.count > 0 ? 'flex' : 'none';
+      if (pulse) {
+        badge.classList.add('scale-125');
+        setTimeout(() => badge.classList.remove('scale-125'), 180);
       }
     }
-
-    if (cartDrawerCount) {
-      cartDrawerCount.textContent = `${totalItemsCount} ${totalItemsCount === 1 ? 'item' : 'items'}`;
-    }
-
-    if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-    if (taxEl) taxEl.textContent = `$${tax.toFixed(2)}`;
-    if (totalValueEl) totalValueEl.textContent = `$${finalTotal.toFixed(2)}`;
-    if (checkoutLabel) checkoutLabel.textContent = `Proceed to Checkout ($${finalTotal.toFixed(2)})`;
-
-    // Free-delivery progress ($35)
-    if (progressBar) {
-      progressBar.style.width = `${Math.min(100, Math.round((subtotal / FREE_DELIVERY_FROM) * 100))}%`;
-    }
-    if (deliveryText) {
-      deliveryText.textContent = subtotal >= FREE_DELIVERY_FROM
-        ? 'Free delivery unlocked!'
-        : `Add $${(FREE_DELIVERY_FROM - subtotal).toFixed(2)} more for free delivery`;
-    }
-
-    // Empty state
-    const isEmpty = items.length === 0;
-    if (emptyState) {
-      emptyState.classList.toggle('hidden', !isEmpty);
-      emptyState.classList.toggle('flex', isEmpty);
-    }
-    if (cartFooter) cartFooter.classList.toggle('opacity-40', isEmpty), cartFooter.classList.toggle('pointer-events-none', isEmpty);
-    if (cartClearAllBtn) cartClearAllBtn.classList.toggle('opacity-40', isEmpty), cartClearAllBtn.classList.toggle('pointer-events-none', isEmpty);
+    document.dispatchEvent(new CustomEvent('fm:cart', { detail: state }));
   }
 
-  function openCart() {
-    if (window.FoodMartWishlist) window.FoodMartWishlist.close(); // only one drawer at a time
-    cartDrawer.classList.remove('translate-x-full');
-    cartDrawer.classList.add('translate-x-0');
-    cartBackdrop.classList.remove('opacity-0', 'pointer-events-none');
-    cartBackdrop.classList.add('opacity-100', 'pointer-events-auto');
+  async function call(method, url, body, successMessage) {
+    if (busy) return false;
+    busy = true;
+    try {
+      const data = await fm.api(method, url, body);
+      state = data.cart;
+      render(true);
+      if (successMessage) fm.toast(successMessage);
+      return true;
+    } catch (err) {
+      fm.toast(err.message, 'error');
+      return false;
+    } finally {
+      busy = false;
+    }
+  }
+
+  const base = fm.urls.cart;
+
+  const api = {
+    add: (variantId, qty) => call('POST', base + '/items', { variant_id: Number(variantId), quantity: Number(qty) || 1 }, 'Added to cart'),
+    set: (variantId, qty) => call('PATCH', `${base}/items/${variantId}`, { quantity: qty }),
+    remove: (variantId) => call('DELETE', `${base}/items/${variantId}`),
+    clear: () => call('DELETE', base),
+    setState: (cart) => { state = cart; render(false); },
+    state: () => state,
+  };
+
+  function open() {
+    if (window.FoodMartWishlist) window.FoodMartWishlist.close();
+    drawer.classList.replace('translate-x-full', 'translate-x-0');
+    backdrop.classList.remove('opacity-0', 'pointer-events-none');
+    backdrop.classList.add('opacity-100', 'pointer-events-auto');
     document.body.style.overflow = 'hidden';
   }
-
-  function closeCart() {
-    cartDrawer.classList.remove('translate-x-0');
-    cartDrawer.classList.add('translate-x-full');
-    cartBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
-    cartBackdrop.classList.add('opacity-0', 'pointer-events-none');
+  function close() {
+    drawer.classList.replace('translate-x-0', 'translate-x-full');
+    backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+    backdrop.classList.add('opacity-0', 'pointer-events-none');
     document.body.style.overflow = '';
   }
 
-  const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-
-  // Add a product (from a product card). Same id => increase quantity, otherwise append a new row.
-  function addToCart(product, qty) {
-    qty = Math.max(1, parseInt(qty, 10) || 1);
-    const existing = Array.from(itemsContainer.querySelectorAll('.cart-item'))
-      .find(row => row.getAttribute('data-product-id') === String(product.id));
-
-    if (existing) {
-      const qtySpan = existing.querySelector('.cart-item-qty');
-      qtySpan.textContent = (parseInt(qtySpan.textContent, 10) || 0) + qty;
-    } else if (template) {
-      const values = {
-        '__ID__': product.id, '__EMOJI__': product.emoji || '🛒', '__IMG__': product.img || '', '__GLOW__': product.glow || '0,245,155',
-        '__NAME__': product.name || 'Product', '__PRICE__': (parseFloat(product.price) || 0).toFixed(2), '__NOTE__': product.note || ''
-      };
-      let html = template.innerHTML;
-      Object.keys(values).forEach(k => { html = html.split(k).join(escapeHtml(values[k])); });
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = html.trim();
-      const row = wrapper.firstElementChild;
-      if (!product.img) {                       // no photo: drop the <img>, show the emoji instead
-        const thumb = row.querySelector('.item-thumb'); if (thumb) thumb.remove();
-        const emo = row.querySelector('.item-emoji'); if (emo) emo.classList.remove('hidden');
-      }
-      row.querySelector('.cart-item-qty').textContent = qty;
-      itemsContainer.insertBefore(row, emptyState);
-    }
-    calculateCart(true);
-  }
-
-  function removeRow(row, duration, transform) {
-    row.style.transition = `all ${duration}s ease`;
-    row.style.opacity = '0';
-    row.style.transform = transform;
-    setTimeout(() => { row.remove(); calculateCart(); }, duration * 1000 - 30);
-  }
-
-  // Toggle / close triggers
-  if (cartToggleBtn) {
-    cartToggleBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      cartDrawer.classList.contains('translate-x-0') ? closeCart() : openCart();
-    });
-  }
-  [cartCloseBtn, cartContinueBtn, cartBackdrop, cartShopNowBtn].forEach(el => el && el.addEventListener('click', closeCart));
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && cartDrawer.classList.contains('translate-x-0')) closeCart();
-  });
-
-  // Stepper + remove (event delegation, so rows added later work too)
-  itemsContainer.addEventListener('click', (e) => {
-    const stepBtn = e.target.closest('.cart-step-btn');
-    const removeBtn = e.target.closest('.cart-remove-item');
+  list.addEventListener('click', (e) => {
     const row = e.target.closest('.cart-item');
     if (!row) return;
+    const id = row.dataset.variantId;
+    const item = (state.items || []).find((i) => String(i.id) === id);
+    if (!item) return;
 
-    if (stepBtn) {
-      e.stopPropagation();
-      const qtySpan = row.querySelector('.cart-item-qty');
-      let qty = parseInt(qtySpan.textContent, 10);
-      if (stepBtn.getAttribute('data-action') === 'increase') {
-        qtySpan.textContent = qty + 1;
-        calculateCart();
-      } else if (qty > 1) {
-        qtySpan.textContent = qty - 1;
-        calculateCart();
-      } else {
-        removeRow(row, 0.25, 'translateX(20px)');
-      }
-    } else if (removeBtn) {
-      e.stopPropagation();
-      removeRow(row, 0.25, 'translateX(20px)');
+    if (e.target.closest('.cart-remove')) { api.remove(id); return; }
+
+    const step = e.target.closest('.cart-step');
+    if (step) {
+      const next = item.qty + Number(step.dataset.delta);
+      next < 1 ? api.remove(id) : api.set(id, next);
     }
   });
 
-  if (cartClearAllBtn) {
-    cartClearAllBtn.addEventListener('click', () => {
-      const items = document.querySelectorAll('.cart-item');
-      items.forEach(row => {
-        row.style.transition = 'all 0.2s ease';
-        row.style.opacity = '0';
-        row.style.transform = 'scale(0.95)';
-      });
-      setTimeout(() => { items.forEach(row => row.remove()); calculateCart(); }, 200);
+  clearBtn.addEventListener('click', () => api.clear());
+  $('cart-checkout-btn').addEventListener('click', () => { window.location.href = fm.urls.checkout; });
+  [ $('cart-close-btn'), $('cart-continue-btn'), $('cart-shop-now-btn'), backdrop ].forEach((el) => el && el.addEventListener('click', close));
+
+  const toggle = $('cart-toggle-btn');
+  if (toggle) {
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      drawer.classList.contains('translate-x-0') ? close() : open();
     });
   }
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('translate-x-0')) close();
+  });
 
-  // Checkout button -> checkout page (url comes from the button's data-checkout-url)
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', function () {
-      const url = this.getAttribute('data-checkout-url');
-      if (url) window.location.href = url;
-    });
-  }
-
-  window.FoodMartCart = { add: addToCart, open: openCart, close: closeCart };
-  calculateCart();
+  window.FoodMartCart = Object.assign(api, { open, close });
+  render(false);
 })();

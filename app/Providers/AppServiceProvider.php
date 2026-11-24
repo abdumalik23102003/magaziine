@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Services\CartService;
+use App\Services\WishlistService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -27,5 +29,13 @@ class AppServiceProvider extends ServiceProvider
             ['partials.header', 'partials.footer', 'pages.catalog'],
             fn ($view) => $view->with('navCategories', app('nav.categories')),
         );
+
+        // Layout: savat va sevimlilarning joriy holati (drawer'lar va header nishonlari uchun)
+        View::composer('layouts.app', function ($view): void {
+            $view->with([
+                'cartData' => app(CartService::class)->summary(),
+                'wishlistData' => app(WishlistService::class)->summary(),
+            ]);
+        });
     }
 }
