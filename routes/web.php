@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
@@ -17,6 +18,9 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/categories/{category:slug}', [CatalogController::class, 'category'])->name('catalog.category');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+
+Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
+Route::get('/brands/{brand:slug}', [BrandController::class, 'show'])->name('brands.show');
 
 // Savat (mehmon ham, foydalanuvchi ham)
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');

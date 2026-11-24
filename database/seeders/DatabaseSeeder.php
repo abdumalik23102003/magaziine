@@ -36,9 +36,31 @@ class DatabaseSeeder extends Seeder
             'l' => Unit::create(['name' => 'Litre', 'short_name' => 'l']),
         ];
 
+        // [nom, tagline, logo, cover, featured] (rasmlar public/foodmart/images ichida)
+        $brandData = [
+            ['FoodMart Farm', 'Straight from our own fields', 'thumb-avocado.png', 'slide-1.jpg', true],
+            ['Alpine Fresh', 'Mountain-grown berries and crisp greens', 'thumb-raspberries.png', 'slide-2.jpg', true],
+            ['Golden Hive', 'Raw honey and slow-baked treats', 'thumb-honey.jpg', 'slide-3.jpg', true],
+            ['Green Valley Dairy', 'Farm milk, bottled at dawn', 'thumb-milk.png', 'slide-4.jpg', true],
+            ['Sunrise Bakery', 'Baked before the city wakes up', 'thumb-biscuits.png', 'slide-1.jpg', true],
+            ['Citrus Grove', 'Cold-pressed sunshine in a bottle', 'thumb-orange-juice.png', 'slide-2.jpg', true],
+            ['Ocean Catch', 'Sustainably caught seafood', 'thumb-tuna.jpg', 'slide-3.jpg', false],
+        ];
+
         $brands = [];
-        foreach (['FoodMart Farm', 'Alpine Fresh', 'Golden Hive', 'Ocean Catch'] as $name) {
-            $brands[$name] = Brand::create(['name' => $name, 'slug' => Str::slug($name)]);
+        foreach ($brandData as $i => [$name, $tagline, $logo, $cover, $featured]) {
+            $brands[$name] = Brand::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'tagline' => $tagline,
+                'description' => $name.' works directly with growers and makers so every product arrives fresh, traceable and fairly priced.',
+                'website' => 'https://example.com/'.Str::slug($name),
+                'logo_path' => 'foodmart/images/'.$logo,
+                'cover_path' => 'foodmart/images/'.$cover,
+                'is_featured' => $featured,
+                'is_active' => true,
+                'sort_order' => $i + 1,
+            ]);
         }
 
         // Demo hamkor birinchi brendni boshqaradi.
@@ -79,14 +101,14 @@ class DatabaseSeeder extends Seeder
             ['Vine-Ripened Cherry Tomatoes', 'Fresh Vegetables', 'FoodMart Farm', 'kg', 'thumb-tomatoes.png', [['1 kg', '7.49', 30], ['500 g', '4.20', 30]]],
             ['Heirloom Garden Tomatoes', 'Fresh Vegetables', 'Alpine Fresh', 'kg', 'thumb-tomatoes.png', [['1 kg', '5.90', null]]],
             ['Fresh Herb Bundle', 'Fresh Vegetables', 'FoodMart Farm', 'pcs', 'thumb-herb.jpg', [['1 bunch', '1.49', null]]],
-            ['Farm Fresh Whole Milk', 'Dairy & Eggs', 'FoodMart Farm', 'l', 'thumb-milk.png', [['1 l', '2.10', null], ['2 pack', '4.20', 17]]],
-            ['Light Semi-Skimmed Milk', 'Dairy & Eggs', 'Alpine Fresh', 'l', 'thumb-milk.png', [['1 l', '1.95', null]]],
-            ['Barista Oat Drink', 'Dairy & Eggs', 'Alpine Fresh', 'l', 'thumb-milk.png', [['1 l', '2.80', 10]]],
-            ['Cold-Pressed Orange Juice', 'Beverages', 'Alpine Fresh', 'l', 'thumb-orange-juice.png', [['1 l', '4.25', null], ['250 ml', '1.60', null]]],
+            ['Farm Fresh Whole Milk', 'Dairy & Eggs', 'Green Valley Dairy', 'l', 'thumb-milk.png', [['1 l', '2.10', null], ['2 pack', '4.20', 17]]],
+            ['Light Semi-Skimmed Milk', 'Dairy & Eggs', 'Green Valley Dairy', 'l', 'thumb-milk.png', [['1 l', '1.95', null]]],
+            ['Barista Oat Drink', 'Dairy & Eggs', 'Green Valley Dairy', 'l', 'thumb-milk.png', [['1 l', '2.80', 10]]],
+            ['Cold-Pressed Orange Juice', 'Beverages', 'Citrus Grove', 'l', 'thumb-orange-juice.png', [['1 l', '4.25', null], ['250 ml', '1.60', null]]],
             ['Smooth Fruit Juice Bottle', 'Beverages', 'FoodMart Farm', 'l', 'product-thumb-1.png', [['500 ml', '3.99', null]]],
-            ['Sunrise Citrus Blend', 'Beverages', 'Alpine Fresh', 'l', 'thumb-orange-juice.png', [['750 ml', '3.40', 20]]],
-            ['Crunchy Butter Biscuits', 'Bakery', 'Golden Hive', 'pcs', 'thumb-biscuits.png', [['250 g', '3.30', 15]]],
-            ['Oat & Honey Cookies', 'Bakery', 'Golden Hive', 'pcs', 'thumb-biscuits.png', [['300 g', '3.90', null]]],
+            ['Sunrise Citrus Blend', 'Beverages', 'Citrus Grove', 'l', 'thumb-orange-juice.png', [['750 ml', '3.40', 20]]],
+            ['Crunchy Butter Biscuits', 'Bakery', 'Sunrise Bakery', 'pcs', 'thumb-biscuits.png', [['250 g', '3.30', 15]]],
+            ['Oat & Honey Cookies', 'Bakery', 'Sunrise Bakery', 'pcs', 'thumb-biscuits.png', [['300 g', '3.90', null]]],
             ['Almond Shortbread', 'Bakery', 'Golden Hive', 'pcs', 'thumb-biscuits.png', [['200 g', '4.40', 10]]],
             ['Wildflower Raw Honey Jar', 'Pantry', 'Golden Hive', 'pcs', 'product-thumb-11.jpg', [['350 g', '8.90', null], ['700 g', '15.50', 8]]],
             ['Acacia Honey', 'Pantry', 'Golden Hive', 'pcs', 'thumb-honey.jpg', [['400 g', '9.80', null]]],

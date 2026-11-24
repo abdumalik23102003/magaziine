@@ -41,7 +41,7 @@
         ])
     @endif
 
-    @include('partials.home-banners')
+    <x-brand-carousel :brands="$brandCarousel" />
 
     @if ($discounted->isNotEmpty())
         @include('partials.home-products', [

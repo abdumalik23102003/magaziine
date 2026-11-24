@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\BrandService;
 use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(BrandService $brands): View
     {
         $featured = Product::query()
             ->active()
@@ -27,7 +28,8 @@ class HomeController extends Controller
             ->get();
 
         $categories = Category::rootsWithCounts();
+        $brandCarousel = $brands->carousel();
 
-        return view('pages.home', compact('featured', 'discounted', 'categories'));
+        return view('pages.home', compact('featured', 'discounted', 'categories', 'brandCarousel'));
     }
 }

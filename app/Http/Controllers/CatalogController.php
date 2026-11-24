@@ -5,26 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Support\ProductSorting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CatalogController extends Controller
 {
-    private const PER_PAGE = 12;
-
-    private const SORTS = [
-        'latest' => 'Newest',
-        'price_asc' => 'Price: low to high',
-        'price_desc' => 'Price: high to low',
-        'name' => 'Name: A-Z',
-    ];
-
-    /** Chegirmadan keyingi narx (SQL). Narx bo'yicha saralash shu bilan ishlaydi. */
-    private const FINAL_PRICE_SQL = 'product_variants.price * (100 - COALESCE(product_variants.discount_percentage, 0)) / 100';
-
     public function index(Request $request): View
     {
         return $this->render($request, null);
@@ -41,13 +29,13 @@ class CatalogController extends Controller
         $rawSearch = $request->query('q');
         $search = is_string($rawSearch) ? Str::of($rawSearch)->squish()->limit(100, '')->toString() : '';
 
+        // ?brand=slug: faqat faol brend. Nofaol/noma'lum slug e'tiborsiz qoldiriladi.
         $rawBrand = $request->query('brand');
         $brand = is_string($rawBrand) && $rawBrand !== ''
-            ? Brand::query()->where('slug', $rawBrand)->first()
+            ? Brand::query()->active()->where('slug', $rawBrand)->first()
             : null;
 
-        $rawSort = $request->query('sort');
-        $sort = is_string($rawSort) && array_key_exists($rawSort, self::SORTS) ? $rawSort : 'latest';
+        $sort = ProductSorting::resolve($request->query('sort'));
 
         $discounted = $request->boolean('discounted');
 
@@ -75,11 +63,12 @@ class CatalogController extends Controller
             $query->whereHas('activeVariants', fn (Builder $variants) => $variants->where('discount_percentage', '>', 0));
         }
 
-        $this->applySort($query, $sort);
+        ProductSorting::apply($query, $sort);
 
-        $products = $query->paginate(self::PER_PAGE)->withQueryString();
+        $products = $query->paginate(ProductSorting::PER_PAGE)->withQueryString();
 
         $brands = Brand::query()
+            ->active()
             ->whereHas('products', fn (Builder $products) => $products->active()->has('activeVariants'))
             ->orderBy('name')
             ->get(['id', 'name', 'slug']);
@@ -91,22 +80,10 @@ class CatalogController extends Controller
             'brand' => $brand,
             'search' => $search,
             'sort' => $sort,
-            'sorts' => self::SORTS,
+            'sorts' => ProductSorting::OPTIONS,
             'discounted' => $discounted,
             'breadcrumbs' => $this->breadcrumbs($category),
         ]);
-    }
-
-    private function applySort(Builder $query, string $sort): void
-    {
-        match ($sort) {
-            'price_asc', 'price_desc' => $query
-                ->withMin('activeVariants as min_final_price', DB::raw(self::FINAL_PRICE_SQL))
-                ->orderBy('min_final_price', $sort === 'price_asc' ? 'asc' : 'desc')
-                ->orderBy('id'),
-            'name' => $query->orderBy('name')->orderBy('id'),
-            default => $query->orderByDesc('id'),
-        };
     }
 
     private function breadcrumbs(?Category $category): array
