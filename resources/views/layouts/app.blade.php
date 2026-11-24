@@ -67,6 +67,7 @@
     <script src="{{ asset('js/cart.js') }}"></script>
     <script src="{{ asset('js/ripple.js') }}"></script>
     <script src="{{ asset('js/cursor.js') }}"></script>
+    <script src="{{ asset('js/header-actions.js') }}"></script>
 
     @stack('scripts')
 </body>

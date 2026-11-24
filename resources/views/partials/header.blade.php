@@ -43,9 +43,9 @@
 <span id="nav-wishlist-count" class="bg-accent-lime text-black border border-surface-obsidian pointer-events-none" style="position: absolute; top: -4px; right: -4px; z-index: 20; min-width: 18px; height: 18px; padding: 0 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border-radius: 9999px; overflow: visible; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">3</span>
 </div>
 <!-- Profile Button -->
-<button class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border border-border-glass flex items-center justify-center text-text-crisp hover:text-primary hover:border-primary/40 transition-colors">
+<a href="{{ route('profile') }}" aria-label="{{ auth()->check() ? 'My profile' : 'Sign in' }}" title="{{ auth()->check() ? 'My profile' : 'Sign in' }}" class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border flex items-center justify-center hover:text-primary hover:border-primary/40 transition-colors {{ request()->routeIs('profile') ? 'border-primary/60 text-primary' : 'border-border-glass text-text-crisp' }}">
 <i class="bi bi-person text-lg"></i>
-</button>
+</a>
 <!-- Cart Button with isolated badge outside overflow -->
 <div class="relative overflow-visible" id="cart-counter-btn">
 <button aria-label="Open Cart" id="cart-toggle-btn" class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border border-border-glass flex items-center justify-center text-text-crisp hover:text-primary hover:border-primary/40 transition-colors">
@@ -80,10 +80,10 @@
 </a>
 </nav>
 
-<div class="hidden xl:flex items-center gap-2 text-xs font-mono text-primary/80 whitespace-nowrap pl-4">
-<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
-<span>ION CURSOR ENGINE ONLINE</span>
-</div>
+<button type="button" id="cursor-toggle" aria-pressed="true" title="Turn the glowing cursor on or off" class="water-ripple-target hidden xl:flex items-center gap-2 rounded-full border border-primary/30 px-3 py-1.5 text-xs font-mono text-primary/80 whitespace-nowrap hover:border-primary/60 transition-colors cursor-pointer">
+<span id="cursor-toggle-dot" class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span id="cursor-toggle-label">ION CURSOR ENGINE ONLINE</span>
+</button>
 </div>
 </div>
 </header>

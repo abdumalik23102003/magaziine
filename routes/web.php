@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -32,6 +33,9 @@ Route::post('/wishlist/move-to-cart', [WishlistController::class, 'moveToCart'])
 Route::delete('/wishlist', [WishlistController::class, 'clear'])->name('wishlist.clear');
 Route::post('/wishlist/{product}', [WishlistController::class, 'toggle'])->whereNumber('product')->name('wishlist.toggle');
 Route::delete('/wishlist/{productId}', [WishlistController::class, 'destroy'])->whereNumber('productId')->name('wishlist.destroy');
+
+// Joylashuv (header tugmasi)
+Route::post('/location/resolve', [LocationController::class, 'resolve'])->middleware('throttle:10,1')->name('location.resolve');
 
 // Mehmonlar uchun
 Route::middleware('guest')->group(function () {

@@ -1,6 +1,7 @@
-@extends('layouts.store')
+@extends('layouts.app')
 
 @section('title', 'FoodMart - '.$product->name)
+@section('main_class', 'w-full flex-1')
 
 @push('scripts')
     <script src="{{ asset('js/pages/product.js') }}"></script>

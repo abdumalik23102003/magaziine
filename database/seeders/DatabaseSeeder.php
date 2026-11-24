@@ -41,6 +41,9 @@ class DatabaseSeeder extends Seeder
             $brands[$name] = Brand::create(['name' => $name, 'slug' => Str::slug($name)]);
         }
 
+        // Demo hamkor birinchi brendni boshqaradi.
+        User::query()->where('email', 'partner@magaziine.test')->first()?->brands()->attach($brands['FoodMart Farm']);
+
         // Asosiy kategoriyalar (icon: public/foodmart/images ichidagi fayl)
         $categories = [];
         $roots = [

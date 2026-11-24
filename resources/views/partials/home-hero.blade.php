@@ -17,12 +17,12 @@
             Harvested each dawn from certified sustainable partner micro-farms. High-density nutrients, crisp seasonal produce, and uncompromised clean staples delivered with racing precision.
           </p>
 <div class="flex flex-wrap items-center gap-4">
-<button class="water-ripple-target neon-glow-btn px-8 py-3.5 rounded-full bg-primary text-surface-obsidian font-display font-bold text-sm tracking-wide uppercase flex items-center gap-2 hover:bg-emerald-400 transition-all cursor-pointer">
+<a href="{{ route('catalog.index') }}" class="water-ripple-target neon-glow-btn px-8 py-3.5 rounded-full bg-primary text-surface-obsidian font-display font-bold text-sm tracking-wide uppercase flex items-center gap-2 hover:bg-emerald-400 transition-all cursor-pointer">
 <i class="bi bi-bag-check-fill text-base"></i> <span>Start Shopping</span>
-</button>
-<button class="water-ripple-target px-7 py-3.5 rounded-full bg-surface-carbon/80 border border-border-glass hover:border-primary/50 text-text-crisp font-display font-semibold text-sm tracking-wide uppercase transition-all backdrop-blur cursor-pointer">
+</a>
+<a href="{{ route('catalog.index', ['discounted' => 1]) }}" class="water-ripple-target px-7 py-3.5 rounded-full bg-surface-carbon/80 border border-border-glass hover:border-primary/50 text-text-crisp font-display font-semibold text-sm tracking-wide uppercase transition-all backdrop-blur cursor-pointer">
 <i class="bi bi-percent text-accent-lime mr-1"></i> <span>Browse Weekly Deals</span>
-</button>
+</a>
 </div>
 </div>
 <!-- Hero Visual Showcase: Interactive Drag & Throw Physics Stage -->
