@@ -10,7 +10,7 @@ class ProductController extends Controller
     public function show(Product $product): View
     {
         // O'chirilgan (soft delete) mahsulotni route binding o'zi 404 qiladi.
-        abort_unless($product->is_active, 404);
+        abort_unless($product->isVisible(), 404);
 
         $product->load(['category.parent', 'brand', 'unit', 'images', 'activeVariants']);
 

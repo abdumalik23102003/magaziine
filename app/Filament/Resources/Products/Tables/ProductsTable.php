@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Enums\ApprovalStatus;
+use App\Filament\Resources\Products\Actions\ProductActions;
+use App\Models\Product;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -38,16 +41,26 @@ class ProductsTable
                 IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
+                TextColumn::make('approval_status')
+                    ->label('Moderation')
+                    ->badge()
+                    ->tooltip(fn (Product $record): ?string => $record->rejection_reason),
             ])
             ->defaultSort('id', 'desc')
+
             ->filters([
                 SelectFilter::make('category')
                     ->relationship('category', 'name'),
                 SelectFilter::make('brand')
                     ->relationship('brand', 'name'),
+                SelectFilter::make('approval_status')
+                    ->label('Moderation')
+                    ->options(ApprovalStatus::class),
                 TrashedFilter::make(),
             ])
             ->recordActions([
+                ProductActions::approve(),
+                ProductActions::reject(),
                 EditAction::make(),
             ])
             ->toolbarActions([

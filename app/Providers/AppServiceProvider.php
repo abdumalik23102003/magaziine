@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\ProductVariant;
+use App\Observers\PartnerChangeObserver;
 use App\Services\CartService;
 use App\Services\WishlistService;
 use Illuminate\Pagination\Paginator;
@@ -24,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::defaultView('vendor.pagination.neon');
+
+        // Hamkor mahsulotining muhim maydonlari o'zgarsa, qayta moderatsiyaga tushadi (config/partner.php).
+        foreach ([Product::class, ProductVariant::class, ProductImage::class] as $model) {
+            $model::observe(PartnerChangeObserver::class);
+        }
 
         View::composer(
             ['partials.header', 'partials.footer', 'pages.catalog'],

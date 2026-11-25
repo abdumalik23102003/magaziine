@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,6 +29,13 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->userMenuItems([
+                Action::make('partner-panel')
+                    ->label('Partner panel')
+                    ->icon('heroicon-o-building-storefront')
+                    ->url('/partner')
+                    ->visible(fn (): bool => (bool) auth()->user()?->isAdmin()),
+            ])
             ->colors([
                 'primary' => Color::Amber,
             ])

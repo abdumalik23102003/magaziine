@@ -26,7 +26,7 @@ class WishlistController extends Controller
 
     public function toggle(Request $request, Product $product): JsonResponse|RedirectResponse
     {
-        abort_unless($product->is_active, 404);
+        abort_unless($product->isVisible(), 404);
 
         $added = $this->wishlist->toggle($product);
         $message = $added ? 'Saved to favorites' : 'Removed from favorites';

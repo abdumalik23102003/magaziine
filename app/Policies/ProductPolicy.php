@@ -47,6 +47,12 @@ class ProductPolicy
         return $user->hasRole(UserRole::Moderator);
     }
 
+    /** Hamkor rad etilgan yoki qoralama mahsulotni qayta ko'rib chiqishga yuboradi. */
+    public function submitForReview(User $user, Product $product): bool
+    {
+        return $this->ownsProduct($user, $product);
+    }
+
     private function ownsProduct(User $user, Product $product): bool
     {
         return $user->hasRole(UserRole::Partner) && $user->ownsBrand($product->brand_id);

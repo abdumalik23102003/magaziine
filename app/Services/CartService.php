@@ -41,7 +41,7 @@ class CartService
         $variant = ProductVariant::query()
             ->whereKey($variantId)
             ->where('is_active', true)
-            ->whereHas('product', fn ($query) => $query->where('is_active', true))
+            ->whereHas('product', fn ($query) => $query->active())
             ->first();
 
         if (! $variant) {
@@ -126,7 +126,7 @@ class CartService
             $product = $variant?->product;
             $max = $variant ? $this->maxFor($variant) : 0;
 
-            if (! $variant || ! $variant->is_active || ! $product || ! $product->is_active || $max < 1) {
+            if (! $variant || ! $variant->is_active || ! $product || ! $product->isVisible() || $max < 1) {
                 $item->delete();
 
                 continue;
