@@ -8,6 +8,8 @@ use App\Models\Post;
 use App\Models\User;
 use DomainException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class PostService
@@ -21,14 +23,46 @@ class PostService
     public const RELATED_LIMIT = 3;
 
     /** /blog: saytda ko'rinadigan maqolalar, sahifalangan (karta massivlari). */
-    public function listing(): LengthAwarePaginator
+    public function listing(?string $search = null, ?string $brandSlug = null): LengthAwarePaginator
     {
         return Post::query()
             ->published()
             ->with('brand:id,name,slug')
+            ->when($search, function (Builder $query, string $term): void {
+                $like = '%'.addcslashes($term, '%_\\').'%';
+
+                $query->where(fn (Builder $where) => $where->where('title', 'like', $like)->orWhere('excerpt', 'like', $like));
+            })
+            ->when($brandSlug, fn (Builder $query, string $slug) => $query->whereHas('brand', fn (Builder $brand) => $brand->where('slug', $slug)))
             ->newest()
             ->paginate(self::PER_PAGE)
+            ->withQueryString()
             ->through(fn (Post $post): array => $this->card($post));
+    }
+
+    /** Filtr ro'yxati: faqat saytda ko'rinadigan maqolasi bor faol brendlar. */
+    public function brandFilters()
+    {
+        return Brand::query()
+            ->where('is_active', true)
+            ->whereIn('id', Post::query()->published()->whereNotNull('brand_id')->select('brand_id'))
+            ->orderBy('name')
+            ->get(['id', 'name', 'slug']);
+    }
+
+    /** Ko'rishlar soni: bir sessiyada bir marta, updated_at ga tegmaydi. */
+    public function recordView(Post $post, Request $request): void
+    {
+        $seen = (array) $request->session()->get('viewed_posts', []);
+
+        if (in_array($post->id, $seen, true)) {
+            return;
+        }
+
+        Post::withoutTimestamps(fn () => Post::query()->whereKey($post->id)->increment('views'));
+        $request->session()->push('viewed_posts', $post->id);
+
+        $post->setAttribute('views', (int) $post->views + 1)->syncOriginalAttribute('views');
     }
 
     /** @return array<int, array<string, mixed>> */

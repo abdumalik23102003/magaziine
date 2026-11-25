@@ -7,6 +7,15 @@
 
 <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 
+@if ($preview)
+    <div class="mx-auto mt-6 max-w-3xl rounded-2xl border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-200">
+        Preview: this post is <strong>{{ $post->status->getLabel() }}</strong> and is not visible to the public.
+        @if ($post->rejection_reason)
+            <span class="mt-1 block">Reason: {{ $post->rejection_reason }}</span>
+        @endif
+    </div>
+@endif
+
 <article class="mx-auto mt-6 max-w-3xl">
     <header>
         <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-widest">
@@ -14,9 +23,13 @@
                 <span class="text-primary">{{ $post->tag }}</span>
                 <span class="text-zinc-600">•</span>
             @endif
-            <time datetime="{{ $post->published_at->toIso8601String() }}" class="text-zinc-400">{{ $post->published_at->format('d M Y') }}</time>
+            <time datetime="{{ ($post->published_at ?? $post->created_at)->toIso8601String() }}" class="text-zinc-400">{{ ($post->published_at ?? $post->created_at)->format('d M Y') }}</time>
             <span class="text-zinc-600">•</span>
             <span class="text-zinc-400">{{ $post->reading_minutes }} min read</span>
+            @unless ($preview)
+                <span class="text-zinc-600">•</span>
+                <span class="text-zinc-400">{{ number_format((int) $post->views) }} {{ (int) $post->views === 1 ? 'view' : 'views' }}</span>
+            @endunless
         </div>
 
         <h1 class="mt-3 font-display text-3xl font-extrabold leading-tight text-text-crisp sm:text-5xl">{{ $post->title }}</h1>
