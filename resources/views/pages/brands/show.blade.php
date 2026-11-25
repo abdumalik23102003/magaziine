@@ -87,4 +87,15 @@
         </div>
     @endif
 </section>
+
+@if (count($posts) > 0)
+    <section class="mt-16">
+        <x-section-heading eyebrow="From the journal" :title="'Latest from '.$brand->name" :href="route('blog.index')" cta="All posts" />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach ($posts as $post)
+                <x-blog-card :post="$post" />
+            @endforeach
+        </div>
+    </section>
+@endif
 @endsection

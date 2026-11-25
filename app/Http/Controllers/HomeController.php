@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\BrandService;
+use App\Services\PostService;
 use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(BrandService $brands): View
+    public function __invoke(BrandService $brands, PostService $postService): View
     {
         $featured = Product::query()
             ->active()
@@ -29,7 +30,8 @@ class HomeController extends Controller
 
         $categories = Category::rootsWithCounts();
         $brandCarousel = $brands->carousel();
+        $posts = $postService->latest();
 
-        return view('pages.home', compact('featured', 'discounted', 'categories', 'brandCarousel'));
+        return view('pages.home', compact('featured', 'discounted', 'categories', 'brandCarousel', 'posts'));
     }
 }

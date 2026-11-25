@@ -147,5 +147,7 @@ class DatabaseSeeder extends Seeder
                 'is_main' => true,
             ]);
         }
+
+        $this->call(PostSeeder::class);
     }
 }

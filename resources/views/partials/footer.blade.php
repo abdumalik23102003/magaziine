@@ -30,6 +30,7 @@
 <div class="lg:col-span-2">
 <h5 class="font-display font-bold text-sm uppercase tracking-wider text-text-crisp mb-4">Support</h5>
 <ul class="space-y-2.5 text-sm text-text-muted font-medium">
+<li><a class="hover:text-primary transition-colors" href="{{ route('blog.index') }}">Journal</a></li>
 <li><a class="hover:text-primary transition-colors" href="#">Track Order</a></li>
 <li><a class="hover:text-primary transition-colors" href="#">Refund Policy</a></li>
 <li><a class="hover:text-primary transition-colors" href="#">Delivery Area</a></li>

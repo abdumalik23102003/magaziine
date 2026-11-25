@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
@@ -21,6 +22,9 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name
 
 Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
 Route::get('/brands/{brand:slug}', [BrandController::class, 'show'])->name('brands.show');
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Savat (mehmon ham, foydalanuvchi ham)
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');

@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BrandShowRequest;
 use App\Models\Brand;
 use App\Services\BrandService;
+use App\Services\PostService;
 use App\Support\ProductSorting;
 use Illuminate\Contracts\View\View;
 
 class BrandController extends Controller
 {
-    public function __construct(private BrandService $brands) {}
+    public function __construct(private BrandService $brands, private PostService $posts) {}
 
     public function index(): View
     {
@@ -35,6 +36,7 @@ class BrandController extends Controller
             'products' => $this->brands->products($brand, $sort),
             'sort' => $sort,
             'sorts' => ProductSorting::OPTIONS,
+            'posts' => $this->posts->latestForBrand($brand),
             'schema' => $this->brands->schema($brand),
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('home')],
