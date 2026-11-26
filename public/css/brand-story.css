@@ -1,0 +1,110 @@
+.brand-story {
+    --story-top: 81px;
+    position: relative;
+    width: 100%;
+    height: 350vh;
+    background: #000;
+}
+
+.brand-story__stage {
+    position: sticky;
+    top: var(--story-top);
+    height: calc(100vh - var(--story-top));
+    height: calc(100svh - var(--story-top));
+    overflow: hidden;
+}
+
+.brand-story__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.brand-story__shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(0, 0, 0, .75), rgba(0, 0, 0, 0) 55%);
+}
+
+.brand-story__copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14%;
+    padding: 0 1.5rem;
+    text-align: center;
+    will-change: opacity, transform;
+}
+
+.brand-story__title {
+    margin: 0 auto;
+    max-width: 60rem;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: #fff;
+    overflow-wrap: anywhere;
+}
+
+.brand-story__subtitle {
+    margin: 1rem auto 0;
+    max-width: 40rem;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: rgba(255, 255, 255, .8);
+    overflow-wrap: anywhere;
+}
+
+.brand-story__loading,
+.brand-story__hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0;
+    text-align: center;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .7);
+}
+
+.brand-story__loading { top: 1.5rem; }
+
+.brand-story__hint { bottom: 1.25rem; }
+
+.brand-story__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, .15);
+}
+
+.brand-story__bar span {
+    display: block;
+    height: 100%;
+    background: #34d399;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.brand-story.is-ready .brand-story__loading { display: none; }
+
+.brand-story.is-static { height: auto; }
+
+.brand-story.is-static .brand-story__stage { position: relative; top: 0; }
+
+.brand-story.is-static .brand-story__shade,
+.brand-story.is-static .brand-story__hint,
+.brand-story.is-static .brand-story__bar,
+.brand-story.is-static .brand-story__loading { display: none; }
+
+.brand-story.is-static .brand-story__copy {
+    top: 8%;
+    bottom: auto;
+    pointer-events: none;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, .8);
+}

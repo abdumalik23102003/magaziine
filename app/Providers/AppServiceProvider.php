@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Observers\PartnerChangeObserver;
+use App\Services\BrandStoryService;
 use App\Services\CartService;
 use App\Services\WishlistService;
 use Illuminate\Pagination\Paginator;
@@ -28,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::defaultView('vendor.pagination.neon');
+
+        // Livewire vaqtinchalik yuklash limiti standart 12 MB: story video uchun oshiriladi.
+        config(['livewire.temporary_file_upload.rules' => ['required', 'file', 'max:'.BrandStoryService::MAX_KB]]);
 
         // Hamkor mahsulotining muhim maydonlari o'zgarsa, qayta moderatsiyaga tushadi (config/partner.php).
         foreach ([Product::class, ProductVariant::class, ProductImage::class] as $model) {

@@ -28,6 +28,7 @@ class PartnerPanelProvider extends PanelProvider
             ->id('partner')
             ->path('partner')
             ->login()
+            ->databaseNotifications()
             ->brandName('FoodMart Partners')
             ->colors([
                 'primary' => Color::Emerald,

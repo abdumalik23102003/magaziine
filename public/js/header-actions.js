@@ -50,15 +50,22 @@
             busy(false);
           }
         },
-        (err) => {
-          busy(false);
-          const messages = {
-            1: 'Location permission denied. Allow it in your browser settings.',
-            2: 'Your location is unavailable right now.',
-            3: 'Location request timed out. Try again.',
-          };
-          toast(messages[err.code] || 'Could not get your location.', 'error');
-        },
+          (err) => {
+              busy(false);
+
+              console.error('Geolocation error:', {
+                  code: err.code,
+                  message: err.message,
+              });
+
+              const messages = {
+                  1: 'Location permission denied. Allow it in your browser settings.',
+                  2: 'Position unavailable: ' + err.message,
+                  3: 'Location request timed out. Try again.',
+              };
+
+              toast(messages[err.code] || `Location error ${err.code}: ${err.message}`, 'error');
+          },
         { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
       );
     });
@@ -72,7 +79,7 @@
       const event = new CustomEvent('support-chat:toggle', { detail: { handled: false } });
       window.dispatchEvent(event);
       if (!event.detail.handled) {
-        toast('Live chat opens soon. Call 1-800-456-7890 meanwhile.');
+        toast('Live chat opens soon. Call +998-90-188-6641 meanwhile.');
       }
     });
   }

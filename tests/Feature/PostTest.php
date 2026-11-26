@@ -72,9 +72,9 @@ class PostTest extends TestCase
         Post::factory()->published()->forBrand($brand)->create([
             'title' => 'Apple Season',
             'slug' => 'apple-season',
-            'body' => "Hello **crisp** world.
+            'body' => 'Hello **crisp** world.
 
-## Picking",
+## Picking',
         ]);
 
         $this->get('/blog/apple-season')

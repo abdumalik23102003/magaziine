@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BrandShowRequest;
 use App\Models\Brand;
 use App\Services\BrandService;
+use App\Services\BrandStoryService;
 use App\Services\PostService;
 use App\Support\ProductSorting;
 use Illuminate\Contracts\View\View;
 
 class BrandController extends Controller
 {
-    public function __construct(private BrandService $brands, private PostService $posts) {}
+    public function __construct(
+        private BrandService $brands,
+        private PostService $posts,
+        private BrandStoryService $stories,
+    ) {}
 
     public function index(): View
     {
@@ -32,6 +37,7 @@ class BrandController extends Controller
 
         return view('pages.brands.show', [
             'brand' => $brand,
+            'story' => $request->hasAny(['page', 'sort']) ? null : $this->stories->forPage($brand),
             'stats' => $this->brands->stats($brand),
             'products' => $this->brands->products($brand, $sort),
             'sort' => $sort,

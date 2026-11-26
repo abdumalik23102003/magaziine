@@ -34,6 +34,8 @@
         @include('partials.announcement-bar')
         @include('partials.header')
 
+        @yield('before_main')
+
         {{-- Sahifa kengligi: product sahifasi kabi to'liq enli sahifalar @section('main_class', ...) bilan almashtiradi --}}
         <main class="@yield('main_class', 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1')">
             @include('partials.flash')
@@ -70,5 +72,6 @@
     <script src="{{ asset('js/header-actions.js') }}"></script>
 
     @stack('scripts')
+@include("partials.support-chat")
 </body>
 </html>

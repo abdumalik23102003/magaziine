@@ -2,6 +2,22 @@
 
 @section('title', $brand->name.' - Brands - FoodMart')
 
+@if ($story)
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('css/brand-story.css') }}">
+    @endpush
+
+    @section('before_main')
+        <x-brand-story :story="$story" :name="$brand->name" />
+    @endsection
+
+    @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+        <script src="{{ asset('js/pages/brand-story.js') }}"></script>
+    @endpush
+@endif
+
 @section('content')
 <x-breadcrumbs :items="$breadcrumbs" />
 

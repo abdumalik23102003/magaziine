@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\CartService;
+use App\Services\SupportChatService;
 use App\Services\WishlistService;
 use App\Support\Visitor;
 use Illuminate\Contracts\View\View;
@@ -75,6 +76,7 @@ class AuthController extends Controller
 
     private function adoptGuestData(User $user, ?string $token): void
     {
+        app(SupportChatService::class)->adoptGuest($user);
         $this->cart->mergeGuestCart($user, $token);
         $this->wishlist->mergeGuestList($user, $token);
         Visitor::forget();

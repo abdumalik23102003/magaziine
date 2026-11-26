@@ -28,6 +28,10 @@ class Brand extends Model
         'is_featured',
         'is_active',
         'sort_order',
+        'story_video_path',
+        'story_enabled',
+        'story_title',
+        'story_subtitle',
     ];
 
     protected function casts(): array
@@ -35,6 +39,7 @@ class Brand extends Model
         return [
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
+            'story_enabled' => 'boolean',
             'sort_order' => 'integer',
         ];
     }

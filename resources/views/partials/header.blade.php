@@ -33,7 +33,7 @@
 <div class="flex items-center gap-3 sm:gap-4">
 <div class="hidden sm:flex flex-col text-right mr-1">
 <span class="text-[10px] font-mono uppercase tracking-widest text-primary font-bold">Fast Support</span>
-<span class="text-xs font-semibold text-text-crisp font-display">1-800-456-7890</span>
+<span class="text-xs font-semibold text-text-crisp font-display">+998-90-188-6641</span>
 </div>
 <!-- Wishlist Button with isolated badge outside overflow -->
 <div class="relative overflow-visible">
@@ -56,6 +56,7 @@
 </div>
 </div>
 <!-- Category Nav Pills -->
+@include('partials.nav-dropdowns')
 <div class="border-t border-border-glass/60 bg-surface-obsidian/50 overflow-x-auto scrollbar-none py-2.5 px-4 sm:px-6 lg:px-8">
 <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
 <nav class="flex items-center gap-2 whitespace-nowrap" aria-label="Departments">
