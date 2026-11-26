@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Services\CommentService;
 use App\Services\PostService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -51,6 +52,7 @@ class BlogController extends Controller
             'related' => $this->posts->related($post),
             'schema' => $this->posts->schema($post),
             'breadcrumbs' => $crumbs,
+            'discussion' => $preview ? null : app(CommentService::class)->discussion($post, $request),
         ]);
     }
 

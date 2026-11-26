@@ -15,6 +15,8 @@
             :price="$variant->final_price"
             :old-price="$variant->has_discount ? $variant->price : null"
             :badge="$variant->has_discount ? '-'.$variant->discount_percentage.'%' : null"
+            :rating="(float) $product->rating_avg"
+            :reviews="(int) $product->rating_count"
         />
     @endforeach
 </div>

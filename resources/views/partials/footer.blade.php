@@ -32,6 +32,8 @@
 <ul class="space-y-2.5 text-sm text-text-muted font-medium">
 <li><a class="hover:text-primary transition-colors" href="{{ route('blog.index') }}">Journal</a></li>
 <li><a class="hover:text-primary transition-colors" href="{{ route('profile') }}">Track Order</a></li>
+<li><a class="hover:text-primary transition-colors" href="{{ route('pages.show', 'refund-policy') }}">Refund Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="{{ route('pages.show', 'delivery-area') }}">Delivery Area</a></li>
 <li><a class="hover:text-primary transition-colors" href="tel:+998901886641">Contact Support</a></li>
 </ul>
 </div>
@@ -45,6 +47,9 @@
 <div class="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-zinc-500">
 <div>© {{ date('Y') }} FoodMart. All rights reserved.</div>
 <div class="flex items-center gap-6">
+<a class="hover:text-primary transition-colors" href="{{ route('pages.show', 'privacy-policy') }}">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="{{ route('pages.show', 'terms-of-service') }}">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="{{ route('pages.show', 'security') }}">Security</a>
 </div>
 </div>
 </div>

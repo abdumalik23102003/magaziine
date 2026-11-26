@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Support\Money;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -18,7 +19,7 @@ class OrderService
      * Savatdan buyurtma yaratadi. Hammasi bitta tranzaksiyada: narxlar serverdan olinadi,
      * ombor qoldig'i shartli UPDATE bilan kamayadi (bir vaqtda ikki kishi oxirgi donani ololmaydi).
      *
-     * @param  array{name:string, phone:string, address:string, delivery_method:string, payment_method:string, note?:?string}  $data
+     * @param  array{name:string, phone:string, address:string, delivery_method:string, payment_method:string, note?:?string, delivery?:array<string, mixed>}  $data
      */
     public function place(User $user, array $data): Order
     {
@@ -49,7 +50,7 @@ class OrderService
                 'phone' => $data['phone'],
                 'address' => $data['address'],
                 'note' => $data['note'] ?? null,
-            ]);
+            ] + Arr::only($data['delivery'] ?? [], Order::DELIVERY_FIELDS));
 
             foreach ($summary['items'] as $line) {
                 $updated = ProductVariant::query()

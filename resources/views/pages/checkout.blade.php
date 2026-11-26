@@ -2,8 +2,14 @@
 
 @section('title', 'Checkout - FoodMart')
 
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+@endpush
+
 @push('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="{{ asset('js/pages/checkout.js') }}"></script>
+    <script src="{{ asset('js/pages/checkout-map.js') }}"></script>
 @endpush
 
 @section('content')
@@ -27,13 +33,30 @@
         <div class="lg:col-span-8 space-y-6">
 
             <section class="dark-glass-card rounded-3xl p-6">
-                <h2 class="font-display font-bold text-xl text-text-crisp mb-5">Delivery details</h2>
+                <h2 class="font-display font-bold text-xl text-text-crisp mb-1">Recipient</h2>
+                <p class="mb-5 text-xs text-text-muted leading-relaxed">Who should the courier ask for? Your account details are filled in; change them to send the order to someone else.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <x-field name="name" label="Full name" :value="$user->name" autocomplete="name" required />
-                    <x-field name="phone" label="Phone" type="tel" :value="$user->phone" autocomplete="tel" placeholder="+998 90 123 45 67" required />
-                    <x-field name="city" label="City" autocomplete="address-level2" required />
-                    <x-field name="apartment" label="Apartment / entrance (optional)" autocomplete="address-line2" />
-                    <x-field class="md:col-span-2" name="address" label="Street address" :value="$user->address" autocomplete="address-line1" required />
+                    <x-field name="name" label="Recipient name" :value="$user->name" autocomplete="name" required />
+                    <x-field name="phone" label="Recipient phone" type="tel" :value="$user->phone" autocomplete="tel" placeholder="+998 90 123 45 67" required />
+                </div>
+            </section>
+
+            @include('partials.checkout-map')
+
+            <section class="dark-glass-card rounded-3xl p-6">
+                <h2 class="font-display font-bold text-xl text-text-crisp mb-1">Delivery address</h2>
+                <p class="mb-5 text-xs text-text-muted leading-relaxed">Filled in from the map where possible. Check it and correct anything that is not exact.</p>
+                <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                    <x-field class="md:col-span-3" name="country" label="Country" autocomplete="country-name" maxlength="80" />
+                    <x-field class="md:col-span-3" name="region" label="Region / state" autocomplete="address-level1" maxlength="80" />
+                    <x-field class="md:col-span-3" name="city" label="City" autocomplete="address-level2" maxlength="50" required />
+                    <x-field class="md:col-span-3" name="district" label="District / suburb" maxlength="80" />
+                    <x-field class="md:col-span-4" name="address" label="Street" :value="$user->address" autocomplete="address-line1" maxlength="150" required />
+                    <x-field class="md:col-span-2" name="house_number" label="House number" maxlength="20" />
+                    <x-field class="md:col-span-2" name="apartment" label="Apartment / suite" autocomplete="address-line2" maxlength="50" />
+                    <x-field class="md:col-span-2" name="entrance" label="Entrance" maxlength="20" />
+                    <x-field class="md:col-span-2" name="floor" label="Floor" maxlength="10" />
+                    <x-field class="md:col-span-2" name="postcode" label="Postal code" autocomplete="postal-code" maxlength="20" />
                 </div>
             </section>
 
@@ -77,7 +100,7 @@
             </section>
 
             <section class="dark-glass-card rounded-3xl p-6">
-                <label for="note" class="text-[10px] font-mono font-bold uppercase tracking-widest text-primary">Note for the courier (optional)</label>
+                <label for="note" class="text-[10px] font-mono font-bold uppercase tracking-widest text-primary">Delivery instructions (optional)</label>
                 <textarea id="note" name="note" rows="3" maxlength="1000" class="mt-2 w-full resize-none rounded-xl bg-surface-carbon border border-border-glass px-4 py-3 text-sm text-text-crisp placeholder:text-zinc-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Leave at the door, call before arrival...">{{ old('note') }}</textarea>
                 @error('note') <p class="mt-1 text-xs text-red-400">{{ $message }}</p> @enderror
             </section>

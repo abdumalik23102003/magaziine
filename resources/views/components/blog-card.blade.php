@@ -20,5 +20,13 @@
             <a href="{{ $post['url'] }}">{{ $post['title'] }}</a>
         </h3>
         <p class="text-sm text-text-muted leading-relaxed line-clamp-3">{{ $post['excerpt'] }}</p>
+        {{-- engagement:meta --}}
+        <div class="mt-auto flex items-center gap-4 pt-4 text-[11px] font-mono text-zinc-500">
+            <span><i class="bi bi-eye"></i> {{ number_format($post['views'] ?? 0) }}</span>
+            <span><i class="bi bi-chat-dots"></i> {{ $post['comments_count'] ?? 0 }}</span>
+            @if (($post['rating_count'] ?? 0) > 0)
+                <span class="ml-auto inline-flex items-center gap-1 text-amber-400"><i class="bi bi-star-fill"></i> {{ number_format($post['rating_avg'], 1) }}</span>
+            @endif
+        </div>
     </div>
 </article>

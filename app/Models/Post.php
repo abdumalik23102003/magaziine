@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PostStatus;
+use App\Models\Concerns\HasComments;
 use App\Observers\PostObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +21,7 @@ use Illuminate\Support\Str;
 #[ObservedBy(PostObserver::class)]
 class Post extends Model
 {
-    use HasFactory;
+    use HasComments, HasFactory;
 
     protected $fillable = [
         'brand_id',

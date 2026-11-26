@@ -39,4 +39,5 @@
     @endif
 
     @include('partials.home-blog')
+    @include('partials.home-app')
 @endsection

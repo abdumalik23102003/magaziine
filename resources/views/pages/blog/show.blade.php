@@ -59,6 +59,12 @@
     </div>
 </article>
 
+{{-- engagement:discussion --}}
+@unless ($preview)
+    <div class="mx-auto mt-4 max-w-3xl">
+        @include('partials.discussion', ['discussion' => $discussion])
+    </div>
+@endunless
 @if (count($related) > 0)
     <section class="mt-16">
         <x-section-heading eyebrow="Keep reading" title="More from the journal" :href="route('blog.index')" cta="All posts" />

@@ -6,6 +6,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CheckoutGeocodeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\OrderController;
@@ -59,6 +60,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::post('/checkout/geocode/reverse', [CheckoutGeocodeController::class, 'reverse'])->middleware('throttle:30,1')->name('checkout.geocode.reverse');
+    Route::post('/checkout/geocode/search', [CheckoutGeocodeController::class, 'search'])->middleware('throttle:12,1')->name('checkout.geocode.search');
 
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
@@ -70,3 +73,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/support.php';
+
+require __DIR__.'/engagement.php';

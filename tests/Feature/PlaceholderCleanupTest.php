@@ -17,7 +17,6 @@ class PlaceholderCleanupTest extends TestCase
             ->assertOk()
             ->assertDontSee('Downtown Chicago')
             ->assertDontSee('Weekly Fresh Club')
-            ->assertDontSee('Download on the App Store')
             ->assertDontSee('href="#"', false);
     }
 

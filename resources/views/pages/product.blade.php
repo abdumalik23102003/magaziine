@@ -58,6 +58,8 @@
         @include('partials.product-purchase')
     </section>
 
+    {{-- engagement:discussion --}}
+    @include('partials.discussion', ['discussion' => $discussion])
     @include('partials.product-related')
 
     @include('partials.cart-toast')

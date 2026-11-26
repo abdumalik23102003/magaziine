@@ -8,6 +8,21 @@
         </div>
         <h1 class="font-headline-lg text-headline-lg text-text-crisp font-semibold tracking-tight mt-1">{{ $info['name'] }}</h1>
         <p class="font-body-md text-body-md text-on-surface-variant">{{ $info['tagline'] }}</p>
+        {{-- engagement:summary --}}
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-text-muted">
+            @if ((int) $product->rating_count > 0)
+                <a href="#discussion" class="inline-flex items-center gap-2 transition-colors hover:text-primary">
+                    <x-stars :value="$product->rating_avg" />
+                    <span>{{ number_format((float) $product->rating_avg, 1) }} ({{ (int) $product->rating_count }})</span>
+                </a>
+            @else
+                <a href="#discussion" class="transition-colors hover:text-primary">No ratings yet</a>
+            @endif
+            <span aria-hidden="true">&middot;</span>
+            <span>{{ number_format((int) $product->views) }} {{ (int) $product->views === 1 ? 'view' : 'views' }}</span>
+            <span aria-hidden="true">&middot;</span>
+            <a href="#discussion" class="transition-colors hover:text-primary">{{ (int) $product->comments_count }} {{ \Illuminate\Support\Str::plural('comment', (int) $product->comments_count) }}</a>
+        </div>
         <div class="flex items-baseline gap-space-sm pt-space-sm">
             <span class="font-display text-headline-lg text-accent-hyper-emerald font-bold tracking-tight" id="display-price">${{ number_format($packs[0]['price'], 2) }}</span>
             <span id="old-price" class="font-headline-sm text-headline-sm text-text-muted line-through {{ $info['was'] ? '' : 'hidden' }}">{{ $info['was'] ? '$'.number_format($info['was'], 2) : '' }}</span>

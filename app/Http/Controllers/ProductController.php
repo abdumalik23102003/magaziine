@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\CommentService;
+use App\Services\ProductViewService;
 use Illuminate\Contracts\View\View;
 
 class ProductController extends Controller
@@ -15,11 +17,13 @@ class ProductController extends Controller
         $product->load(['category.parent', 'brand', 'unit', 'images', 'activeVariants']);
 
         abort_if($product->activeVariants->isEmpty(), 404);
+        app(ProductViewService::class)->record($product, request());
 
         return view('pages.product', [
             'product' => $product,
             'related' => $this->related($product),
             'breadcrumbs' => $this->breadcrumbs($product),
+            'discussion' => app(CommentService::class)->discussion($product, request()),
         ]);
     }
 

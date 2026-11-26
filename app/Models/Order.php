@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
+    /** Tuzilmali yetkazish maydonlari (OrderService::place faqat shularni qabul qiladi). */
+    public const DELIVERY_FIELDS = [
+        'delivery_lat', 'delivery_lng', 'delivery_country', 'delivery_country_code', 'delivery_region',
+        'delivery_city', 'delivery_district', 'delivery_street', 'delivery_house_number', 'delivery_postcode',
+        'delivery_apartment', 'delivery_entrance', 'delivery_floor',
+    ];
+
     protected $fillable = [
         'user_id',
         'customer_name',
@@ -24,6 +31,7 @@ class Order extends Model
         'phone',
         'address',
         'note',
+        ...self::DELIVERY_FIELDS,
     ];
 
     protected function casts(): array
@@ -34,6 +42,8 @@ class Order extends Model
             'tax' => 'decimal:2',
             'delivery_fee' => 'decimal:2',
             'total_price' => 'decimal:2',
+            'delivery_lat' => 'decimal:7',
+            'delivery_lng' => 'decimal:7',
         ];
     }
 
@@ -51,6 +61,19 @@ class Order extends Model
     protected function number(): Attribute
     {
         return Attribute::get(fn () => 'FM-'.str_pad((string) $this->getKey(), 5, '0', STR_PAD_LEFT));
+    }
+
+    public function hasLocation(): bool
+    {
+        return $this->delivery_lat !== null && $this->delivery_lng !== null;
+    }
+
+    /** Kuryer/operator uchun OpenStreetMap havolasi. */
+    protected function mapUrl(): Attribute
+    {
+        return Attribute::get(fn (): ?string => $this->hasLocation()
+            ? sprintf('https://www.openstreetmap.org/?mlat=%1$s&mlon=%2$s#map=17/%1$s/%2$s', $this->delivery_lat, $this->delivery_lng)
+            : null);
     }
 
     public function isCancellableByCustomer(): bool

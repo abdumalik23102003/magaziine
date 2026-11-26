@@ -10,6 +10,7 @@
         @if ($autocomplete) autocomplete="{{ $autocomplete }}" @endif
         @if ($placeholder) placeholder="{{ $placeholder }}" @endif
         @required($required)
+        {{ $attributes }}
         class="w-full bg-surface-carbon border border-border-glass hover:border-primary/40 focus:border-primary rounded-xl py-2.5 px-4 text-sm text-text-crisp placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all @error($name) border-red-400/60 @enderror"
     >
     @error($name)

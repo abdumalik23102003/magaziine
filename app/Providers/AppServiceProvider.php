@@ -18,6 +18,24 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        // Geokodlash provayderi (config/geocoding.php). Almashtirish: yangi Geocoder yozing va match ga qo'shing.
+        $this->app->singleton(\App\Services\Geocoding\Geocoder::class, function ($app) {
+            $driver = (string) config('geocoding.driver');
+
+            $inner = match ($driver) {
+                'nominatim' => new \App\Services\Geocoding\NominatimGeocoder((array) config('geocoding.nominatim')),
+                default => throw new \InvalidArgumentException("Unknown geocoding driver [{$driver}]."),
+            };
+
+            return new \App\Services\Geocoding\CachingGeocoder(
+                $inner,
+                $app->make('cache.store'),
+                (int) config('geocoding.cache_ttl'),
+                (int) config('geocoding.cache_miss_ttl'),
+                'geocoding:'.$driver,
+            );
+        });
+
         // Har so'rovda bir marta olinadi (header, footer va katalog bir xil ma'lumotni ishlatadi).
         $this->app->scoped('nav.categories', fn () => Category::query()
             ->roots()

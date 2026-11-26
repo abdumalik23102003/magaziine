@@ -67,6 +67,9 @@
         <div>
             <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-primary">Address</p>
             <p class="text-text-crisp">{{ $order->address }}</p>
+            @if ($order->map_url)
+                <a href="{{ $order->map_url }}" target="_blank" rel="noopener" class="mt-1 inline-flex items-center gap-1.5 text-xs font-mono text-primary hover:underline"><i class="bi bi-geo-alt"></i> View on map</a>
+            @endif
         </div>
         <div>
             <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-primary">Delivery</p>
