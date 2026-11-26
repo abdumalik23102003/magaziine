@@ -64,3 +64,24 @@
     });
   });
 })();
+
+// Header category pills: only those that fit on the single row stay visible and focusable.
+(function () {
+  var nav = document.querySelector('[data-fit-pills]');
+  if (!nav) return;
+
+  function fit() {
+    var pills = Array.prototype.slice.call(nav.children);
+    if (!pills.length) return;
+    var top = Math.min.apply(null, pills.map(function (p) { return p.offsetTop; }));
+    pills.forEach(function (p) {
+      var fits = p.offsetTop === top && p.offsetWidth <= nav.clientWidth - 8;
+      p.style.visibility = fits ? '' : 'hidden';
+    });
+  }
+
+  window.addEventListener('resize', fit, { passive: true });
+  window.addEventListener('load', fit);
+  if (document.fonts) document.fonts.ready.then(fit);
+  fit();
+})();

@@ -6,7 +6,6 @@ use App\Enums\ApprovalStatus;
 use App\Enums\OrderStatus;
 use App\Enums\PostStatus;
 use App\Filament\Partner\Resources\Brands\Pages\EditBrandProfile;
-use App\Filament\Partner\Resources\Brands\Pages\ListBrandProfiles;
 use App\Filament\Partner\Resources\Orders\Pages\ListOrderItems;
 use App\Filament\Partner\Resources\Posts\Pages\CreatePost as PartnerCreatePost;
 use App\Filament\Partner\Resources\Posts\Pages\EditPost as PartnerEditPost;
@@ -14,6 +13,7 @@ use App\Filament\Partner\Resources\Posts\Pages\ListPosts as PartnerListPosts;
 use App\Filament\Partner\Resources\Products\Pages\CreateProduct as PartnerCreateProduct;
 use App\Filament\Partner\Resources\Products\Pages\EditProduct as PartnerEditProduct;
 use App\Filament\Partner\Resources\Products\Pages\ListProducts as PartnerListProducts;
+use App\Filament\Partner\Widgets\PartnerStats;
 use App\Filament\Resources\Products\Pages\ListProducts as AdminListProducts;
 use App\Models\Brand;
 use App\Models\Category;
@@ -379,7 +379,8 @@ class PartnerPanelTest extends TestCase
     {
         $this->actingAs($this->partner);
 
-        Livewire::test(ListBrandProfiles::class)->assertOk();
+        $this->get('/partner/brand-profile')
+            ->assertRedirect("/partner/brand-profile/{$this->own->getRouteKey()}/edit");
 
         $this->assertContains($this->get("/partner/brand-profile/{$this->other->getRouteKey()}/edit")->status(), [403, 404]);
 
@@ -468,6 +469,8 @@ class PartnerPanelTest extends TestCase
         $this->assertSame(1, $partners->products($this->partner)->count());
         $this->assertSame(0, $partners->pendingCount($this->partner));
 
-        $this->actingAs($this->partner)->get('/partner')->assertOk()->assertSee('Sales, last 30 days');
+        $this->actingAs($this->partner)->get('/partner')->assertOk();
+
+        Livewire::withoutLazyLoading()->test(PartnerStats::class)->assertSee('Sales, last 30 days');
     }
 }

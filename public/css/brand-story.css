@@ -22,6 +22,12 @@
     object-fit: cover;
 }
 
+.brand-story__canvas { visibility: hidden; }
+
+.brand-story.has-frames .brand-story__canvas { visibility: visible; }
+
+.brand-story.has-frames video.brand-story__video { visibility: hidden; }
+
 .brand-story__shade {
     position: absolute;
     inset: 0;

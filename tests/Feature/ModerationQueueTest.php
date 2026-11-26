@@ -40,7 +40,7 @@ class ModerationQueueTest extends TestCase
         return $product;
     }
 
-    private function post(PostStatus $status): Post
+    private function makePost(PostStatus $status): Post
     {
         $post = Post::factory()->forBrand($this->brand)->create();
         $post->forceFill(['status' => $status])->save();
@@ -53,8 +53,8 @@ class ModerationQueueTest extends TestCase
         $pendingProduct = $this->product(ApprovalStatus::Pending);
         $this->product(ApprovalStatus::Approved);
         $this->product(ApprovalStatus::Draft);
-        $pendingPost = $this->post(PostStatus::Pending);
-        $this->post(PostStatus::Draft);
+        $pendingPost = $this->makePost(PostStatus::Pending);
+        $this->makePost(PostStatus::Draft);
 
         $service = app(ModerationQueueService::class);
         $keys = $service->pending($this->moderator)->pluck('key')->all();
@@ -66,7 +66,7 @@ class ModerationQueueTest extends TestCase
     public function test_moderator_approves_product_and_post_from_the_queue(): void
     {
         $product = $this->product(ApprovalStatus::Pending);
-        $post = $this->post(PostStatus::Pending);
+        $post = $this->makePost(PostStatus::Pending);
         $service = app(ModerationQueueService::class);
 
         $service->approve('product', $product->id, $this->moderator);
@@ -97,7 +97,7 @@ class ModerationQueueTest extends TestCase
 
     public function test_post_can_be_rejected_with_a_reason(): void
     {
-        $post = $this->post(PostStatus::Pending);
+        $post = $this->makePost(PostStatus::Pending);
 
         app(ModerationQueueService::class)->reject('post', $post->id, $this->moderator, 'Matnda xato bor.');
 

@@ -46,11 +46,15 @@ class NavigationDropdownsTest extends TestCase
         $this->get('/')
             ->assertSee(route('catalog.category', 'fruits'), false)
             ->assertSee(route('catalog.category', 'berries'), false)
-            ->assertDontSee('Empty Aisle')
             ->assertSee('Fresh Farm')
             ->assertDontSee('Hidden Farm')
             ->assertSee(route('brands.index'), false)
             ->assertSee('discounted=1', false);
+
+        $names = array_column(app(NavigationService::class)->catalog()['categories'], 'name');
+
+        $this->assertContains('Fruits', $names);
+        $this->assertNotContains('Empty Aisle', $names);
     }
 
     public function test_categories_with_only_pending_products_are_hidden(): void
@@ -61,7 +65,9 @@ class NavigationDropdownsTest extends TestCase
 
         Cache::flush();
 
-        $this->get('/')->assertDontSee('Pending Aisle');
+        $names = array_column(app(NavigationService::class)->catalog()['categories'], 'name');
+
+        $this->assertNotContains('Pending Aisle', $names);
     }
 
     public function test_cache_is_flushed_when_a_brand_changes(): void

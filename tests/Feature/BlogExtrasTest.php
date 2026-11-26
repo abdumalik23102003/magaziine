@@ -12,6 +12,13 @@ class BlogExtrasTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['navigation.latest_posts' => 0]);
+    }
+
     public function test_search_matches_title_and_excerpt(): void
     {
         Post::factory()->published()->create(['title' => 'Mango Season', 'excerpt' => 'Sweet fruit.']);

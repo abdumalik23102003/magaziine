@@ -40,7 +40,7 @@
 <button aria-label="Open Saved Favorites" id="wishlist-toggle-btn" class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border border-border-glass flex items-center justify-center text-text-crisp hover:text-primary hover:border-primary/40 transition-colors">
 <i class="bi bi-heart text-base"></i>
 </button>
-<span id="nav-wishlist-count" class="bg-accent-lime text-black border border-surface-obsidian pointer-events-none" style="position: absolute; top: -4px; right: -4px; z-index: 20; min-width: 18px; height: 18px; padding: 0 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border-radius: 9999px; overflow: visible; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">3</span>
+<span id="nav-wishlist-count" class="bg-accent-lime text-black border border-surface-obsidian pointer-events-none" style="position: absolute; top: -4px; right: -4px; z-index: 20; min-width: 18px; height: 18px; padding: 0 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border-radius: 9999px; overflow: visible; box-shadow: 0 2px 5px rgba(0,0,0,0.5); display: {{ $wishlistData['count'] > 0 ? 'flex' : 'none' }};">{{ $wishlistData['count'] }}</span>
 </div>
 <!-- Profile Button -->
 <a href="{{ route('profile') }}" aria-label="{{ auth()->check() ? 'My profile' : 'Sign in' }}" title="{{ auth()->check() ? 'My profile' : 'Sign in' }}" class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border flex items-center justify-center hover:text-primary hover:border-primary/40 transition-colors {{ request()->routeIs('profile') ? 'border-primary/60 text-primary' : 'border-border-glass text-text-crisp' }}">
@@ -51,40 +51,10 @@
 <button aria-label="Open Cart" id="cart-toggle-btn" class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border border-border-glass flex items-center justify-center text-text-crisp hover:text-primary hover:border-primary/40 transition-colors">
 <i class="bi bi-bag text-base"></i>
 </button>
-<span class="bg-primary text-black border border-surface-obsidian pointer-events-none transition-transform duration-200" id="nav-cart-count" style="position: absolute; top: -4px; right: -4px; z-index: 20; min-width: 18px; height: 18px; padding: 0 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border-radius: 9999px; overflow: visible; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">5</span>
+<span class="bg-primary text-black border border-surface-obsidian pointer-events-none transition-transform duration-200" id="nav-cart-count" style="position: absolute; top: -4px; right: -4px; z-index: 20; min-width: 18px; height: 18px; padding: 0 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border-radius: 9999px; overflow: visible; box-shadow: 0 2px 5px rgba(0,0,0,0.5); display: {{ $cartData['count'] > 0 ? 'flex' : 'none' }};">{{ $cartData['count'] }}</span>
 </div>
 </div>
 </div>
 <!-- Category Nav Pills -->
-@include('partials.nav-dropdowns')
-<div class="border-t border-border-glass/60 bg-surface-obsidian/50 overflow-x-auto scrollbar-none py-2.5 px-4 sm:px-6 lg:px-8">
-<div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-<nav class="flex items-center gap-2 whitespace-nowrap" aria-label="Departments">
-@php
-    $pillOn = 'water-ripple-target px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-primary text-black flex items-center gap-1.5 shadow-[0_0_16px_rgba(0,245,155,0.35)] cursor-pointer';
-    $pillOff = 'water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30 transition-all flex items-center gap-1.5 cursor-pointer';
-    $pillDeal = 'water-ripple-target px-3.5 py-1.5 rounded-full text-xs font-semibold text-accent-lime hover:text-white bg-surface-carbon/80 border border-accent-lime/30 transition-all flex items-center gap-1.5 cursor-pointer';
-    $activeCategory = request()->route('category');
-    $allActive = request()->routeIs('catalog.index') && ! request()->boolean('discounted');
-@endphp
-<a class="{{ $allActive ? $pillOn : $pillOff }}" href="{{ route('catalog.index') }}">
-<i class="bi bi-grid-fill {{ $allActive ? '' : 'text-primary' }}"></i> All Departments
-</a>
-@foreach ($navCategories as $navCategory)
-@php($isOn = $activeCategory && ($activeCategory->id === $navCategory->id || $activeCategory->parent_id === $navCategory->id))
-<a class="{{ $isOn ? $pillOn : $pillOff }}" href="{{ route('catalog.category', $navCategory->slug) }}">
-<i class="bi bi-tag {{ $isOn ? '' : 'text-primary' }}"></i> {{ $navCategory->name }}
-</a>
-@endforeach
-<a class="{{ $pillDeal }}" href="{{ route('catalog.index', ['discounted' => 1]) }}">
-<i class="bi bi-stars"></i> Special Deals %
-</a>
-</nav>
-
-<button type="button" id="cursor-toggle" aria-pressed="true" title="Turn the glowing cursor on or off" class="water-ripple-target hidden xl:flex items-center gap-2 rounded-full border border-primary/30 px-3 py-1.5 text-xs font-mono text-primary/80 whitespace-nowrap hover:border-primary/60 transition-colors cursor-pointer">
-<span id="cursor-toggle-dot" class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
-<span id="cursor-toggle-label">ION CURSOR ENGINE ONLINE</span>
-</button>
-</div>
-</div>
+@include('partials.header-nav')
 </header>

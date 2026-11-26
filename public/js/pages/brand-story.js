@@ -7,6 +7,7 @@
   const copy = section.querySelector('[data-story-copy]');
   const hint = section.querySelector('[data-story-hint]');
   const bar = section.querySelector('[data-story-bar]');
+  const canvas = section.querySelector('[data-story-canvas]');
   const header = document.querySelector('header');
   const src = video.dataset.src;
 
@@ -36,9 +37,11 @@
 
   let progress = 0;
   let queued = false;
+  let frames = null;
 
   function seek() {
     queued = false;
+    if (frames) return;
     if (video.readyState < 1 || !Number.isFinite(video.duration)) return;
     if (video.seeking) return;
     const target = progress * Math.max(video.duration - 0.05, 0);
@@ -60,7 +63,8 @@
       copy.style.opacity = String(1 - fade);
       copy.style.transform = 'translateY(' + (-40 * fade) + 'px)';
     }
-    requestSeek();
+    if (frames) frames.draw(progress);
+    else requestSeek();
   }
 
   video.addEventListener('seeked', requestSeek);
@@ -88,7 +92,7 @@
       trigger: section,
       start: () => 'top top+=' + headerHeight(),
       end: 'bottom bottom',
-      scrub: 0.5,
+      scrub: 1,
       invalidateOnRefresh: true,
     },
   });
@@ -108,6 +112,16 @@
       if (!response.ok) throw new Error('HTTP ' + response.status);
       return response.blob();
     })
-    .then((blob) => load(URL.createObjectURL(blob)))
+    .then((blob) => {
+      const url = URL.createObjectURL(blob);
+      load(url);
+      if (window.BrandStoryFrames && canvas) {
+        window.BrandStoryFrames(url, canvas, (ready) => {
+          frames = ready;
+          frames.draw(progress);
+          section.classList.add('has-frames');
+        });
+      }
+    })
     .catch(() => load(src));
 })();

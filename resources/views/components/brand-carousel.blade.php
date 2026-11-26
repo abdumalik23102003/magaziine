@@ -11,7 +11,7 @@
             </button>
 
             <div data-carousel-track tabindex="0" role="group" aria-label="Brands, use the left and right arrow keys to browse"
-                class="flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth rounded-3xl pb-4 [scrollbar-width:none] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-scrollbar]:hidden">
+                class="flex cursor-grab snap-x snap-mandatory -mx-4 -mb-4 -mt-6 gap-5 overflow-x-auto scroll-smooth scroll-px-4 px-4 pb-8 pt-6 [scrollbar-width:none] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-scrollbar]:hidden">
                 @foreach ($brands as $brand)
                     <x-brand-card :brand="$brand" data-carousel-item class="w-[17rem] shrink-0 snap-start sm:w-80" />
                 @endforeach

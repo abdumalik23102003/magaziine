@@ -67,7 +67,9 @@ class BrandStoryTest extends TestCase
             ->assertSee($path, false)
             ->assertSee('From seed to shelf')
             ->assertSee('Grown slowly')
-            ->assertSee('ScrollTrigger.min.js', false);
+            ->assertSee('ScrollTrigger.min.js', false)
+            ->assertSee('data-story-canvas', false)
+            ->assertSee('brand-story-frames.js', false);
     }
 
     public function test_story_is_skipped_while_sorting_or_paginating(): void

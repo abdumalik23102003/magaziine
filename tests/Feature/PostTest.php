@@ -19,6 +19,13 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['navigation.latest_posts' => 0]);
+    }
+
     private function service(): PostService
     {
         return app(PostService::class);

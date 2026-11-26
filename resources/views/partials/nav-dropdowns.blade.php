@@ -1,17 +1,16 @@
 @php
-    $trigger = 'flex cursor-pointer list-none items-center gap-2 rounded-full border border-border-glass bg-surface-carbon/80 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-text-crisp transition-colors hover:border-primary/40 hover:text-primary [&::-webkit-details-marker]:hidden';
-    $panel = 'mt-2 rounded-2xl border border-border-glass bg-surface-carbon p-3 md:absolute md:left-0 md:top-full md:z-50 md:mt-2 md:shadow-2xl';
+    $trigger = 'flex cursor-pointer list-none h-[30px] items-center gap-1.5 whitespace-nowrap rounded-full border border-border-glass bg-surface-carbon/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-text-crisp transition-colors hover:border-primary/40 hover:text-primary [&::-webkit-details-marker]:hidden';
+    $panel = 'absolute left-0 right-0 top-full z-50 mt-2 max-h-[70vh] overflow-y-auto rounded-2xl border border-border-glass bg-surface-carbon p-3 shadow-2xl md:right-auto';
     $link = 'flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-text-muted transition-colors hover:bg-white/5 hover:text-primary';
     $heading = 'mb-2 px-3 text-[10px] font-mono font-bold uppercase tracking-widest text-primary';
 @endphp
 
-<div class="relative z-40 border-t border-border-glass/60 bg-surface-obsidian/60 px-4 py-2 sm:px-6 lg:px-8">
-    <div class="mx-auto flex max-w-7xl flex-col gap-2 md:flex-row md:items-start md:gap-3">
+<div class="flex shrink-0 items-center gap-2">
 
-        <details data-dropdown class="group relative">
+        <details data-dropdown class="group md:relative">
             <summary class="{{ $trigger }}">
                 <i class="bi bi-compass text-primary"></i> Sahifalar
-                <i class="bi bi-chevron-down text-[10px] transition-transform group-open:rotate-180"></i>
+                <i class="bi bi-chevron-down hidden text-[10px] sm:inline transition-transform group-open:rotate-180"></i>
             </summary>
             <div data-dropdown-panel class="{{ $panel }} md:w-64">
                 <ul class="space-y-0.5">
@@ -28,12 +27,12 @@
             </div>
         </details>
 
-        <details data-dropdown class="group relative">
+        <details data-dropdown class="group">
             <summary class="{{ $trigger }}">
                 <i class="bi bi-grid-fill text-primary"></i> Katalog
-                <i class="bi bi-chevron-down text-[10px] transition-transform group-open:rotate-180"></i>
+                <i class="bi bi-chevron-down hidden text-[10px] sm:inline transition-transform group-open:rotate-180"></i>
             </summary>
-            <div data-dropdown-panel class="{{ $panel }} md:w-[44rem]">
+            <div data-dropdown-panel class="{{ $panel }} md:w-[44rem] md:max-w-full">
                 <div class="grid gap-6 md:grid-cols-3">
                     <div>
                         <p class="{{ $heading }}">Kategoriyalar</p>
@@ -79,7 +78,6 @@
                 </div>
             </div>
         </details>
-    </div>
 </div>
 
 @once
