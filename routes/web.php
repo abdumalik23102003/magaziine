@@ -73,5 +73,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/support.php';
+require __DIR__.'/tma.php';
 
 require __DIR__.'/engagement.php';

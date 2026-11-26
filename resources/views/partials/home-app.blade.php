@@ -43,10 +43,15 @@
             {{-- Store badges --}}
             <div class="mt-5 flex flex-wrap items-center gap-4">
                 @foreach ($stores as $store)
-                    <a
-                        href="{{ $store['url'] ?: '#' }}"
-                        aria-label="{{ $store['name'] }}"
-                        class="group relative inline-flex rounded-xl border border-emerald-400/40 bg-emerald-400/5 p-1
+                    @php $tag = $store['url'] ? 'a' : 'span'; @endphp
+                    <{{ $tag }}
+                        @if ($store['url'])
+                            href="{{ $store['url'] }}"
+                            aria-label="{{ $store['name'] }}"
+                        @else
+                            title="Coming soon"
+                        @endif
+                        class="{{ $store['url'] ? '' : 'cursor-default opacity-60' }} group relative inline-flex rounded-xl border border-emerald-400/40 bg-emerald-400/5 p-1
                    shadow-[0_0_12px_rgba(16,185,129,0.15)]
                    transition-all duration-300
                    hover:-translate-y-1 hover:border-emerald-300
@@ -58,7 +63,7 @@
                             class="h-12 w-auto rounded-lg object-contain"
                             loading="lazy"
                         >
-                    </a>
+                    </{{ $tag }}>
                 @endforeach
             </div>
         </div>

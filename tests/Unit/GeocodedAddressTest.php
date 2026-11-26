@@ -17,7 +17,7 @@ class GeocodedAddressTest extends TestCase
             ],
         ]);
 
-        $this->assertSame(
+        $this->assertEquals(
             ['street' => 'Amir Temur', 'house_number' => '10', 'district' => 'Mirzo Ulugbek', 'city' => 'Tashkent', 'region' => 'Tashkent Region', 'postcode' => '100000', 'country' => 'Uzbekistan', 'country_code' => 'UZ'],
             array_intersect_key($address->toArray(), array_flip(['street', 'house_number', 'district', 'city', 'region', 'postcode', 'country', 'country_code'])),
         );

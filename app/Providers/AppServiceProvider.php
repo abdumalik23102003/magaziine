@@ -9,7 +9,11 @@ use App\Models\ProductVariant;
 use App\Observers\PartnerChangeObserver;
 use App\Services\BrandStoryService;
 use App\Services\CartService;
+use App\Services\Geocoding\CachingGeocoder;
+use App\Services\Geocoding\Geocoder;
+use App\Services\Geocoding\NominatimGeocoder;
 use App\Services\WishlistService;
+use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -19,15 +23,15 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Geokodlash provayderi (config/geocoding.php). Almashtirish: yangi Geocoder yozing va match ga qo'shing.
-        $this->app->singleton(\App\Services\Geocoding\Geocoder::class, function ($app) {
+        $this->app->singleton(Geocoder::class, function ($app) {
             $driver = (string) config('geocoding.driver');
 
             $inner = match ($driver) {
-                'nominatim' => new \App\Services\Geocoding\NominatimGeocoder((array) config('geocoding.nominatim')),
+                'nominatim' => new NominatimGeocoder((array) config('geocoding.nominatim')),
                 default => throw new \InvalidArgumentException("Unknown geocoding driver [{$driver}]."),
             };
 
-            return new \App\Services\Geocoding\CachingGeocoder(
+            return new CachingGeocoder(
                 $inner,
                 $app->make('cache.store'),
                 (int) config('geocoding.cache_ttl'),
@@ -47,6 +51,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::defaultView('vendor.pagination.neon');
+
+        // Tunnel yoki reverse proxy orqasida havolalar https bo'lib chiqsin (config/telegram.php).
+        if ($proxies = config('telegram.trusted_proxies')) {
+            TrustProxies::at($proxies);
+        }
 
         // Livewire vaqtinchalik yuklash limiti standart 12 MB: story video uchun oshiriladi.
         config(['livewire.temporary_file_upload.rules' => ['required', 'file', 'max:'.BrandStoryService::MAX_KB]]);

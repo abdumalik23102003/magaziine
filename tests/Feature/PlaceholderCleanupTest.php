@@ -20,6 +20,17 @@ class PlaceholderCleanupTest extends TestCase
             ->assertDontSee('href="#"', false);
     }
 
+    public function test_store_badges_link_only_when_a_url_is_set(): void
+    {
+        config(['pages.app_store_url' => 'https://apps.example.test/foodmart', 'pages.play_store_url' => null]);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('href="https://apps.example.test/foodmart"', false)
+            ->assertSee('title="Coming soon"', false)
+            ->assertDontSee('href="#"', false);
+    }
+
     public function test_catalog_cards_do_not_show_fake_stars(): void
     {
         $product = Product::factory()->create();

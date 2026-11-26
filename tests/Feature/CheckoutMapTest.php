@@ -190,13 +190,14 @@ class CheckoutMapTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Http::fake(['*' => Http::response(['error' => 'Unable to geocode'])]);
+        // Http::fake qayta chaqirilsa birinchi javob ustun qoladi, shuning uchun javoblar ketma-ket beriladi.
+        Http::fake(['*' => Http::sequence()
+            ->push(['error' => 'Unable to geocode'])
+            ->push('boom', 500)
+            ->push($this->nominatimReverse())]);
+
         $this->actingAs($user)->postJson('/checkout/geocode/reverse', ['lat' => 10, 'lng' => 10])->assertNotFound();
-
-        Http::fake(['*' => Http::response('boom', 500)]);
         $this->actingAs($user)->postJson('/checkout/geocode/reverse', ['lat' => 20, 'lng' => 20])->assertStatus(503);
-
-        Http::fake(['*' => Http::response($this->nominatimReverse())]);
         $this->actingAs($user)->postJson('/checkout/geocode/reverse', ['lat' => 20, 'lng' => 20])->assertOk(); // xato keshlanmagan
     }
 
