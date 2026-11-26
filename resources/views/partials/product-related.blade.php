@@ -15,6 +15,7 @@
                 @continue(! $rv)
 
                 <x-recommend-card
+                    :variant-id="$rv->id"
                     :href="route('products.show', $r->slug)"
                     :name="$r->name"
                     :tag="$rv->has_discount ? '-'.$rv->discount_percentage.'%' : $r->category->name"

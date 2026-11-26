@@ -12,15 +12,7 @@
 @endpush
 
 @section('content')
-{{-- Bazadan: $featured, $discounted, $categories (HomeController). Banner massivi hali demo. --}}
-@php
-    $banners = [
-        ['img' => 'foodmart/images/ad-image-1.png', 'kicker' => 'Up to 20% off',  'title' => 'Fresh Fruits & Veggie Bags',  'glow' => '0,245,155'],
-        ['img' => 'foodmart/images/ad-image-2.png', 'kicker' => 'Baked at dawn',   'title' => 'Artisan Breads & Baskets',    'glow' => '245,158,11'],
-        ['img' => 'foodmart/images/ad-image-3.png', 'kicker' => 'Gift ready',      'title' => 'Premium Chocolate Boxes',     'glow' => '168,85,247'],
-        ['img' => 'foodmart/images/ad-image-4.png', 'kicker' => 'New this week',   'title' => 'Handmade Party Cupcakes',     'glow' => '244,63,94'],
-    ];
-@endphp
+{{-- Bazadan: $featured, $discounted, $categories (HomeController). --}}
 
     @include('partials.home-hero')
     @include('partials.home-trust')
@@ -47,5 +39,4 @@
     @endif
 
     @include('partials.home-blog')
-    @include('partials.home-app')
 @endsection

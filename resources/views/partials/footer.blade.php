@@ -31,35 +31,20 @@
 <h5 class="font-display font-bold text-sm uppercase tracking-wider text-text-crisp mb-4">Support</h5>
 <ul class="space-y-2.5 text-sm text-text-muted font-medium">
 <li><a class="hover:text-primary transition-colors" href="{{ route('blog.index') }}">Journal</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Track Order</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Refund Policy</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Delivery Area</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Contact Support</a></li>
+<li><a class="hover:text-primary transition-colors" href="{{ route('profile') }}">Track Order</a></li>
+<li><a class="hover:text-primary transition-colors" href="tel:+998901886641">Contact Support</a></li>
 </ul>
 </div>
 <div class="lg:col-span-3">
-<h5 class="font-display font-bold text-sm uppercase tracking-wider text-text-crisp mb-4">Weekly Fresh Club</h5>
-<p class="text-xs text-text-muted mb-4 leading-relaxed">
-            Subscribe and receive $10 off your first delivery plus curated farm harvest bulletins.
-          </p>
-<!-- Newsletter subscription form -->
-<form class="flex flex-col sm:flex-row items-stretch gap-2 w-full max-w-md" onsubmit="event.preventDefault();">
-<div class="relative flex-1 min-w-0">
-<input class="w-full bg-surface-carbon border border-border-glass rounded-xl px-4 py-2.5 text-xs text-text-crisp placeholder:text-zinc-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Enter your email..." type="email"/>
-</div>
-<button class="water-ripple-target px-6 py-2.5 rounded-xl bg-primary hover:bg-emerald-400 text-surface-obsidian font-display font-bold text-xs uppercase tracking-wider whitespace-nowrap transition-colors cursor-pointer shadow-[0_0_15px_rgba(0,245,155,0.3)] shrink-0 flex items-center justify-center gap-1.5" type="submit">
-<span>SUBSCRIBE</span>
-<i class="bi bi-arrow-right font-bold"></i>
-</button>
-</form>
+<h5 class="font-display font-bold text-sm uppercase tracking-wider text-text-crisp mb-4">Need help?</h5>
+<p class="text-xs text-text-muted mb-4 leading-relaxed">Questions about an order or delivery? Our team is one message away.</p>
+<a class="block text-sm font-display font-semibold text-text-crisp hover:text-primary transition-colors mb-3" href="tel:+998901886641">+998-90-188-6641</a>
+<button type="button" onclick="window.dispatchEvent(new CustomEvent('support-chat:toggle', { detail: { handled: false } }))" class="water-ripple-target px-6 py-2.5 rounded-xl bg-primary hover:bg-emerald-400 text-surface-obsidian font-display font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer">Open live chat</button>
 </div>
 </div>
 <div class="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-zinc-500">
-<div>© 2025 FoodMart Groceries Inc. Ultra-Modern Harvest Network.</div>
+<div>© {{ date('Y') }} FoodMart. All rights reserved.</div>
 <div class="flex items-center gap-6">
-<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
-<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
-<a class="hover:text-primary transition-colors" href="#">Security</a>
 </div>
 </div>
 </div>

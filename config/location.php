@@ -3,7 +3,7 @@
 return [
 
     /* Header tugmasida joylashuv aniqlanmaguncha ko'rinadigan nom. */
-    'default' => env('LOCATION_DEFAULT', 'Downtown Chicago'),
+    'default' => env('LOCATION_DEFAULT', 'Select location'),
 
     /* OpenStreetMap Nominatim (bepul). Siyosat: o'zingizni tanishtiruvchi User-Agent shart, ~1 so'rov/soniya. */
     'nominatim_url' => env('LOCATION_NOMINATIM_URL', 'https://nominatim.openstreetmap.org/reverse'),

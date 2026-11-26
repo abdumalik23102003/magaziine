@@ -2,7 +2,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
 <!-- Brand Logo with Interactive 3D Perspective, Orbit Ring and Hover Scaling -->
 <div class="brand-logo-container">
-<a class="flex items-center gap-3.5 group brand-logo-link py-1 px-1.5 rounded-xl cursor-pointer" href="/">
+<a class="flex items-center gap-3.5 group brand-logo-link py-1 px-1.5 rounded-xl cursor-pointer" href="{{ route('home') }}">
 <!-- Animated Orbiting Particle Ring & Halo Icon -->
 <div class="relative flex items-center justify-center">
 <div class="orbit-ring"></div>

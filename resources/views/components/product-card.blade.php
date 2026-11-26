@@ -34,6 +34,7 @@
         @endif
     </h3>
 
+    @if ($reviews > 0)
     <div class="flex items-center gap-1 text-accent-lime text-xs mb-4">
         @for ($i = 1; $i <= 5; $i++)
             @if ($rating >= $i)
@@ -46,6 +47,8 @@
         @endfor
         <span class="text-zinc-500 font-mono text-[11px] ml-1">({{ $reviews }})</span>
     </div>
+
+    @endif
 
     <div class="mt-auto pt-4 border-t border-border-glass flex items-center justify-between gap-2">
         <div class="flex items-baseline gap-1 font-display shrink-0">

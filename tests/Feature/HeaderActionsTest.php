@@ -37,7 +37,7 @@ class HeaderActionsTest extends TestCase
         $response = $this->get('/')->assertOk();
 
         $response->assertSee('id="location-btn"', false);
-        $response->assertSee('Downtown Chicago');
+        $response->assertSee('Select location');
         $response->assertSee('id="hotline-btn"', false);
         $response->assertSee('id="cursor-toggle"', false);
         $response->assertSee('ION CURSOR ENGINE ONLINE');
@@ -93,7 +93,7 @@ class HeaderActionsTest extends TestCase
             ->assertStatus(422)
             ->assertJsonStructure(['message']);
 
-        $this->get('/')->assertSee('Downtown Chicago');
+        $this->get('/')->assertSee('Select location');
     }
 
     public function test_location_endpoint_is_throttled(): void

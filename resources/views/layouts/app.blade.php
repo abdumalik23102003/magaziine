@@ -72,6 +72,6 @@
     <script src="{{ asset('js/header-actions.js') }}"></script>
 
     @stack('scripts')
-@include("partials.support-chat")
+    @include('partials.support-chat')
 </body>
 </html>
