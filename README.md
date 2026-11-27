@@ -41,6 +41,37 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## Authentication
+
+Customers can sign in with a password or without one:
+
+- **Email code**: a 6-digit one-time code is emailed (`/login/code`). A new email creates an account automatically.
+- **Google / GitHub**: Laravel Socialite. A button shows only when its keys are set.
+- **Telegram**: Mini App (`/tma`) and the website Login Widget share the same `users.telegram_id`.
+
+Passwordless sign-in is allowed only for active customer accounts. Staff and partner panels need a password. An existing account is linked by email only when that email is verified.
+
+### Configuration (`.env`)
+
+```
+MAIL_MAILER=log              # the code appears in storage/logs/laravel.log
+# or Mailpit (included in compose.yaml): MAIL_MAILER=smtp MAIL_HOST=mailpit MAIL_PORT=1025 -> http://localhost:8025
+
+GOOGLE_CLIENT_ID=   GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=   GITHUB_CLIENT_SECRET=
+TELEGRAM_BOT_TOKEN= TELEGRAM_BOT_USERNAME=   # widget also needs a public HTTPS domain
+```
+
+### Creating the OAuth apps
+
+- **Google**: Google Cloud Console, APIs & Services, OAuth consent screen, then Credentials, Create OAuth client ID (Web application). Authorized redirect URI: `APP_URL/auth/google/callback`.
+- **GitHub**: Settings, Developer settings, OAuth Apps, New OAuth App. Authorization callback URL: `APP_URL/auth/github/callback`.
+- **Telegram widget**: in @BotFather run `/setdomain` with your public HTTPS domain (localhost does not work; use a tunnel).
+
+### Maintenance
+
+Old email codes are pruned daily (`model:prune`, scheduled in `routes/console.php`). Run `php artisan schedule:work` locally or a cron entry for `schedule:run` in production.
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

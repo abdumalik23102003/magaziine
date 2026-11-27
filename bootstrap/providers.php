@@ -10,4 +10,5 @@ return [
     PlatformServiceProvider::class,
     AdminPanelProvider::class,
     PartnerPanelProvider::class,
+    App\Providers\TelegramBotServiceProvider::class,
 ];

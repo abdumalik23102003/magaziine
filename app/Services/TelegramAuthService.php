@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Models\User;
 use App\Support\TelegramLoginWidget;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -87,6 +88,13 @@ class TelegramAuthService
 
         if (! is_string($id) || ! ctype_digit($id) || (int) $id <= 0) {
             $this->fail('Telegram data could not be verified.');
+        }
+
+        // Replay himoyasi: bir xil imzo (URL) ikkinchi marta qabul qilinmaydi.
+        $ttl = max((int) config('telegram.widget_max_age'), 1) + self::CLOCK_SKEW + 60;
+
+        if (! Cache::add('telegram-widget:'.$query['hash'], true, $ttl)) {
+            $this->fail('This Telegram sign-in link was already used. Please try again.');
         }
 
         return [

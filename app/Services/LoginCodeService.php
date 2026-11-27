@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Mail\LoginCodeMail;
 use App\Models\LoginCode;
 use App\Support\OneTimeCode;
+use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -34,7 +36,27 @@ class LoginCodeService
     public function issue(string $email, ?string $ip = null): void
     {
         $email = self::normalize($email);
+        $code = OneTimeCode::generate();
 
+        try {
+            // Tekshiruv va yaratish bitta qulf ostida: parallel so'rovlar pauza/soatlik limitni aylanib o'tolmasin.
+            $row = Cache::lock('login-code:'.sha1($email), 10)->block(5, fn (): LoginCode => $this->createRow($email, $code, $ip));
+        } catch (LockTimeoutException) {
+            throw ValidationException::withMessages(['email' => 'Please wait a moment and try again.']);
+        }
+
+        try {
+            Mail::to($email)->send(new LoginCodeMail($code, self::TTL_MINUTES));
+        } catch (Throwable $e) {
+            report($e);
+            $row->delete();
+
+            throw ValidationException::withMessages(['email' => 'We could not send the email right now. Please try again in a minute.']);
+        }
+    }
+
+    private function createRow(string $email, string $code, ?string $ip): LoginCode
+    {
         $latest = LoginCode::query()->where('email', $email)->latest('id')->first();
 
         if ($latest !== null) {
@@ -51,9 +73,7 @@ class LoginCodeService
             throw ValidationException::withMessages(['email' => 'Too many codes requested for this email. Please try again later.']);
         }
 
-        $code = OneTimeCode::generate();
-
-        $row = DB::transaction(function () use ($email, $code, $ip): LoginCode {
+        return DB::transaction(function () use ($email, $code, $ip): LoginCode {
             // Yangi kod eskisini bekor qiladi: bir vaqtda faqat bitta kod ishlaydi.
             LoginCode::query()->where('email', $email)->whereNull('used_at')->update(['used_at' => now()]);
 
@@ -64,15 +84,6 @@ class LoginCodeService
                 'ip_address' => $ip,
             ]);
         });
-
-        try {
-            Mail::to($email)->send(new LoginCodeMail($code, self::TTL_MINUTES));
-        } catch (Throwable $e) {
-            report($e);
-            $row->delete();
-
-            throw ValidationException::withMessages(['email' => 'We could not send the email right now. Please try again in a minute.']);
-        }
     }
 
     /** To'g'ri bo'lsa kodni sarflaydi (qayta ishlamaydi) va true qaytaradi. */

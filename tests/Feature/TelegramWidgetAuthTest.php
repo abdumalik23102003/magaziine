@@ -106,6 +106,17 @@ class TelegramWidgetAuthTest extends TestCase
         $this->hitCallback($this->widgetData())->assertNotFound();
     }
 
+    public function test_the_same_signed_link_cannot_be_used_twice(): void
+    {
+        $data = $this->widgetData();
+
+        $this->hitCallback($data)->assertRedirect('/');
+        $this->post('/logout');
+
+        $this->hitCallback($data)->assertRedirect(route('login'))->assertSessionHasErrors('auth');
+        $this->assertGuest();
+    }
+
     public function test_login_page_shows_the_widget_only_when_configured(): void
     {
         $this->get('/login')->assertSee('telegram-widget.js', false)->assertSee('data-telegram-login="magaziine_bot"', false);

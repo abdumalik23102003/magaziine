@@ -18,6 +18,8 @@
             <button type="submit" class="water-ripple-target w-full rounded-full bg-primary hover:bg-emerald-400 py-3 font-display text-xs font-bold uppercase tracking-wider text-black transition-colors">Create account</button>
         </form>
 
+        @include('pages.auth.partials.alternatives')
+
         <p class="mt-6 text-center text-sm text-text-muted">
             Already registered? <a href="{{ route('login') }}" class="font-bold text-primary hover:underline">Sign in</a>
         </p>
