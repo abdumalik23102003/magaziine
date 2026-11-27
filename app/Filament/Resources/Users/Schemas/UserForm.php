@@ -19,7 +19,8 @@ class UserForm
         return $schema
             ->components([
                 TextInput::make('name')->required()->maxLength(120),
-                TextInput::make('email')->email()->required()->maxLength(255)->unique(ignoreRecord: true),
+                // Telegram orqali kirgan mijozlarda email bo'lmasligi mumkin; yangi va boshqa hisoblarda majburiy.
+                TextInput::make('email')->email()->required(fn (?User $record): bool => $record?->telegram_id === null)->maxLength(255)->unique(ignoreRecord: true),
                 TextInput::make('phone')->tel()->maxLength(32),
                 TextInput::make('address')->maxLength(255),
                 TextInput::make('password')

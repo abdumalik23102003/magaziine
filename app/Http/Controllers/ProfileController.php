@@ -39,12 +39,20 @@ class ProfileController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            // Emaili bor foydalanuvchi uni o'chira olmaydi (kirish emaili shu). Telegram orqali kirganlarda email bo'sh bo'lishi mumkin.
+            'email' => [$user->email !== null ? 'required' : 'nullable', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'phone' => ['nullable', 'string', 'max:32', 'regex:/^[0-9+()\-\s]+$/'],
             'address' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $user->update($data);
+        $user->fill($data);
+
+        // Email o'zgarsa, yangi manzil tasdiqlanmagan hisoblanadi (email kod va Google/GitHub bog'lash uchun muhim).
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return back()->with('status', 'Profile updated.');
     }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\UserRole;
 use App\Models\User;
+use App\Support\TelegramLoginWidget;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -56,6 +57,46 @@ class TelegramAuthService
         return $user;
     }
 
+    /**
+     * Saytdagi Telegram Login Widget (data-auth-url bo'yicha kelgan so'rov maydonlari) imzosini tekshiradi.
+     * https://core.telegram.org/widgets/login-legacy
+     *
+     * @param  array<string, mixed>  $query
+     * @return array<string, mixed> userFor() ga mos Telegram "user" massivi
+     */
+    public function verifyWidget(array $query): array
+    {
+        $token = (string) config('telegram.bot_token');
+
+        if ($token === '') {
+            Log::warning('Telegram sign-in: TELEGRAM_BOT_TOKEN is not set.');
+            $this->fail('Telegram sign-in is not configured yet.');
+        }
+
+        if (! TelegramLoginWidget::isValid($query, $token)) {
+            $this->fail('Telegram data could not be verified.');
+        }
+
+        $age = now()->getTimestamp() - (int) ($query['auth_date'] ?? 0);
+
+        if ($age > (int) config('telegram.widget_max_age') || $age < -self::CLOCK_SKEW) {
+            $this->fail('Telegram session expired. Please try again.');
+        }
+
+        $id = $query['id'] ?? '';
+
+        if (! is_string($id) || ! ctype_digit($id) || (int) $id <= 0) {
+            $this->fail('Telegram data could not be verified.');
+        }
+
+        return [
+            'id' => (int) $id,
+            'first_name' => (string) ($query['first_name'] ?? ''),
+            'last_name' => (string) ($query['last_name'] ?? ''),
+            'username' => isset($query['username']) ? (string) $query['username'] : null,
+        ];
+    }
+
     /** @param  array<string, mixed>  $telegram  verify() qaytargan massiv */
     public function userFor(array $telegram): User
     {
@@ -81,10 +122,9 @@ class TelegramAuthService
     {
         $name = Str::squish(($telegram['first_name'] ?? '').' '.($telegram['last_name'] ?? ''));
 
-        // Telegram email bermaydi: .invalid zonasi hech qachon haqiqiy manzil bo'lmaydi.
+        // Telegram email bermaydi: email bo'sh (NULL) qoladi. Haqiqiy emailni foydalanuvchi keyin o'zi qo'shadi.
         $user = new User([
             'name' => Str::limit($name !== '' ? $name : 'Telegram user', 120, ''),
-            'email' => sprintf('tg%d.%s@telegram.invalid', $telegram['id'], Str::lower(Str::random(12))),
             'password' => Str::random(48),
         ]);
 

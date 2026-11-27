@@ -10,7 +10,7 @@
         <x-avatar :user="$user" initial size="w-20 h-20" text="text-3xl" class="shadow-[0_0_24px_var(--primary-glow)]" />
         <div>
             <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-text-crisp">{{ $user->name }}</h1>
-            <p class="text-sm text-text-muted">{{ $user->email }} &middot; member since {{ $user->created_at->format('M Y') }}</p>
+            <p class="text-sm text-text-muted">{{ $user->email ?: 'No email added' }} &middot; member since {{ $user->created_at->format('M Y') }}</p>
             <a href="{{ route('settings') }}" class="mt-1 inline-block text-xs font-bold text-primary hover:underline">Change photo, theme &amp; fonts</a>
         </div>
     </div>

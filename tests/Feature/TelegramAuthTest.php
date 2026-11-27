@@ -69,7 +69,7 @@ class TelegramAuthTest extends TestCase
         $this->assertSame('Ali Valiyev', $user->name);
         $this->assertSame('ali_v', $user->telegram_username);
         $this->assertSame(UserRole::Customer, $user->role);
-        $this->assertStringEndsWith('@telegram.invalid', $user->email);
+        $this->assertNull($user->email);
         $this->get('/tma')->assertOk()->assertSee('Ali Valiyev');
     }
 

@@ -11,6 +11,12 @@ return [
     /* initData necha soniya yaroqli. */
     'init_data_max_age' => (int) env('TELEGRAM_INIT_DATA_MAX_AGE', 86400),
 
+    /* Saytdagi "Telegram bilan kirish" tugmasi uchun bot username (@ siz). Bo'sh bo'lsa tugma ko'rinmaydi. */
+    'bot_username' => env('TELEGRAM_BOT_USERNAME'),
+
+    /* Login Widget imzosi necha soniya yaroqli (initData dan qisqaroq: URL ga tushadi). */
+    'widget_max_age' => (int) env('TELEGRAM_WIDGET_MAX_AGE', 600),
+
     /* Bot menyu tugmasidagi yozuv. */
     'menu_button_text' => env('TELEGRAM_MENU_TEXT', 'Shop'),
 

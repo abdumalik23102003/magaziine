@@ -8,6 +8,10 @@
         <h1 class="font-display font-extrabold text-3xl text-text-crisp">Sign in</h1>
         <p class="mt-1 text-sm text-text-muted">Welcome back. Your cart and favorites will follow you.</p>
 
+        @error('auth')
+            <p class="mt-4 rounded-xl border border-red-400/40 bg-red-400/10 px-4 py-3 text-sm text-red-300">{{ $message }}</p>
+        @enderror
+
         <form method="POST" action="{{ route('login.store') }}" class="mt-8 space-y-5">
             @csrf
             <x-field name="email" label="Email" type="email" autocomplete="email" required />
@@ -20,6 +24,8 @@
 
             <button type="submit" class="water-ripple-target w-full rounded-full bg-primary hover:bg-emerald-400 py-3 font-display text-xs font-bold uppercase tracking-wider text-black transition-colors">Sign in</button>
         </form>
+
+        @include('pages.auth.partials.alternatives')
 
         <p class="mt-6 text-center text-sm text-text-muted">
             New here? <a href="{{ route('register') }}" class="font-bold text-primary hover:underline">Create an account</a>

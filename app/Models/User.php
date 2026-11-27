@@ -83,6 +83,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         return $this->avatarUrl();
     }
 
+    /** Google / GitHub hisoblari (Telegram bu yerda emas: u users.telegram_id da). */
+    public function socialAccounts(): HasMany
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
+
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
