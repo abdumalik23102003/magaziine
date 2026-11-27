@@ -22,19 +22,19 @@
   }
   .floating-fruit:active, .floating-fruit.is-dragging {
     cursor: grabbing !important;
-    filter: drop-shadow(0 0 28px rgba(0, 245, 155, 0.95)) drop-shadow(0 0 45px rgba(210, 255, 0, 0.6)) scale(1.18) !important;
+    filter: drop-shadow(0 0 28px rgb(var(--glow) / 0.95)) drop-shadow(0 0 45px rgb(var(--c-accent-lime) / 0.6)) scale(1.18) !important;
     z-index: 50 !important;
   }
 
   .fruit-avocado {
     font-size: 4.8rem;
-    filter: drop-shadow(0 14px 24px rgba(0, 245, 155, 0.45));
+    filter: drop-shadow(0 14px 24px rgb(var(--glow) / 0.45));
     z-index: 12;
   }
 
   .fruit-broccoli {
     font-size: 4.6rem;
-    filter: drop-shadow(0 14px 24px rgba(16, 185, 129, 0.45));
+    filter: drop-shadow(0 14px 24px rgb(var(--glow-2) / 0.45));
     z-index: 10;
   }
 

@@ -23,6 +23,7 @@
     const pref = readPref();
     if (pref === 'on') return true;
     if (pref === 'off') return false;
+    if (document.documentElement.dataset.motion === 'reduced') return false;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const coarse = window.matchMedia('(pointer: coarse)').matches;
     return !(reduced || coarse);
@@ -45,12 +46,27 @@
   const droplets = [];
   const MAX_DROPLETS = 65;
 
-  const palette = [
-    { r: 0, g: 245, b: 155 },
-    { r: 16, g: 185, b: 129 },
-    { r: 45, g: 212, b: 191 },
-    { r: 210, g: 255, b: 0 },
-  ];
+  /* Ranglar mavzudan olinadi (themes.css: --cursor-rgb ...). */
+  let palette = [];
+  let main = { r: 0, g: 245, b: 155 };
+  let mid = { r: 16, g: 185, b: 129 };
+  let core = '255, 255, 255';
+  let blend = 'screen';
+  function readRgb(style, name, fallback) {
+    const p = style.getPropertyValue(name).trim().split(/\s+/).map(Number);
+    return p.length === 3 && p.every((n) => !isNaN(n)) ? { r: p[0], g: p[1], b: p[2] } : fallback;
+  }
+  function readTheme() {
+    const st = getComputedStyle(document.documentElement);
+    main = readRgb(st, '--cursor-rgb', main);
+    mid = readRgb(st, '--cursor-rgb-2', mid);
+    palette = [main, mid, readRgb(st, '--cursor-rgb-3', main), readRgb(st, '--cursor-rgb-4', mid)];
+    const c = readRgb(st, '--cursor-core', { r: 255, g: 255, b: 255 });
+    core = c.r + ', ' + c.g + ', ' + c.b;
+    blend = st.getPropertyValue('--cursor-blend').trim() || 'screen';
+  }
+  readTheme();
+  window.addEventListener('fm:prefs', readTheme);
 
   class Droplet {
     constructor(x, y, radius, vx, vy) {
@@ -139,7 +155,7 @@
     }
 
     ctx.save();
-    ctx.globalCompositeOperation = 'screen';
+    ctx.globalCompositeOperation = blend;
 
     if (points.length > 2) {
       for (let i = 1; i < points.length; i++) {
@@ -151,7 +167,7 @@
         ctx.beginPath();
         ctx.moveTo(p0.x, p0.y);
         ctx.lineTo(p1.x, p1.y);
-        ctx.strokeStyle = `rgba(0, 245, 155, ${alpha})`;
+        ctx.strokeStyle = `rgba(${main.r}, ${main.g}, ${main.b}, ${alpha})`;
         ctx.lineWidth = factor * 10 + 2;
         ctx.lineCap = 'round';
         ctx.stroke();
@@ -159,7 +175,7 @@
         ctx.beginPath();
         ctx.moveTo(p0.x, p0.y);
         ctx.lineTo(p1.x, p1.y);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.6})`;
+        ctx.strokeStyle = `rgba(${core}, ${alpha * 0.6})`;
         ctx.lineWidth = factor * 3 + 1;
         ctx.stroke();
       }
@@ -174,10 +190,10 @@
 
     if (mouse.x > -50 && mouse.y > -50) {
       const glowGrad = ctx.createRadialGradient(smoothMouse.x, smoothMouse.y, 0, smoothMouse.x, smoothMouse.y, 16);
-      glowGrad.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
-      glowGrad.addColorStop(0.35, 'rgba(0, 245, 155, 0.45)');
-      glowGrad.addColorStop(0.7, 'rgba(16, 185, 129, 0.2)');
-      glowGrad.addColorStop(1, 'rgba(0, 245, 155, 0.0)');
+      glowGrad.addColorStop(0, `rgba(${core}, 0.85)`);
+      glowGrad.addColorStop(0.35, `rgba(${main.r}, ${main.g}, ${main.b}, 0.45)`);
+      glowGrad.addColorStop(0.7, `rgba(${mid.r}, ${mid.g}, ${mid.b}, 0.2)`);
+      glowGrad.addColorStop(1, `rgba(${main.r}, ${main.g}, ${main.b}, 0)`);
 
       ctx.fillStyle = glowGrad;
       ctx.beginPath();
@@ -186,7 +202,7 @@
 
       ctx.beginPath();
       ctx.arc(smoothMouse.x - 2, smoothMouse.y - 2, 2.8, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.fillStyle = `rgba(${core}, 0.95)`;
       ctx.fill();
     }
 
@@ -239,6 +255,7 @@
     writePref(on ? 'on' : 'off');
     if (on) start(); else stop();
     syncButton();
+    window.dispatchEvent(new CustomEvent('fm:cursor'));
   }
 
   window.FoodMartCursor = {

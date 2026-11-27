@@ -43,6 +43,10 @@ class PartnerPanelProvider extends PanelProvider
                 AccountWidget::class,
             ])
             ->userMenuItems([
+                Action::make('site-settings')
+                    ->label('Settings & profile photo')
+                    ->icon('heroicon-o-paint-brush')
+                    ->url('/settings'),
                 Action::make('admin-panel')
                     ->label('Admin panel')
                     ->icon('heroicon-o-cog-6-tooth')

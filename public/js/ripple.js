@@ -3,6 +3,8 @@
   
   rippleTargets.forEach(btn => {
     btn.addEventListener('click', function(e) {
+      const root = document.documentElement.dataset;
+      if (root.ripple === 'off' || root.motion === 'reduced') return;
       let pond = this.querySelector('.pond-ripple-container');
       if (!pond) {
         pond = document.createElement('div');

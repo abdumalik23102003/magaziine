@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -13,11 +14,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 /** role va is_active ataylab $fillable da yo'q: oddiy forma orqali o'zgarmasin. */
 #[Fillable(['name', 'email', 'password', 'phone', 'address'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -67,6 +69,18 @@ class User extends Authenticatable implements FilamentUser
             'partner' => $this->hasRole(UserRole::Partner, UserRole::Admin),
             default => false,
         };
+    }
+
+    /** Profil rasmi URL i (yo'q bo'lsa null: sayt bosh harf, Filament standart avatar ko'rsatadi). */
+    public function avatarUrl(): ?string
+    {
+        return $this->avatar_path ? Storage::disk('public')->url($this->avatar_path) : null;
+    }
+
+    /** Filament panellaridagi avatar (admin va partner). */
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatarUrl();
     }
 
     public function carts(): HasMany

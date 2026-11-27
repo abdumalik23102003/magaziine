@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="dark" data-theme="dark" data-tone="dark" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,16 +7,19 @@
     <title>@yield('title', 'FoodMart - High Performance Organic Market')</title>
 
     {{-- Tailwind CSS (CDN) & icons --}}
+    {{-- Mavzu/shrift sozlamalari sahifa chizilishidan oldin qo'llansin (miltillamasin) --}}
+    <script src="{{ asset('js/prefs.js') }}"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300..800&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300..800&family=Hanken+Grotesk:wght@300..800&family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <script src="{{ asset('js/tailwind-config.js') }}"></script>
     <script src="{{ asset('js/tailwind-config-extra.js') }}"></script>
 
     {{-- Global styles (used by EVERY page) --}}
+    <link rel="stylesheet" href="{{ asset('css/themes.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     {{-- Page-specific styles: @push('styles') ... @endpush --}}

@@ -1,0 +1,241 @@
+/*
+ * Mavzular, shriftlar va sozlamalar (Settings sahifasi).
+ * Atributlar <html> da: data-theme (dark|mint|lavender), data-tone (dark|light),
+ * data-font, data-heading, data-size, data-motion, data-ambient, data-ripple.
+ * Ranglar "R G B" uch sonli o'zgaruvchilar: Tailwind `rgb(var(--c-x) / <alpha-value>)` ishlatadi.
+ */
+
+/* ---------- Qorong'i (standart) ---------- */
+:root {
+  --c-primary: 0 245 155;
+  --c-primary-ink: 0 245 155;      /* primary matn sifatida ishlatilganda */
+  --c-accent-emerald: 16 185 129;
+  --c-accent-lime: 210 255 0;
+  --c-accent-ink: 210 255 0;       /* lime/pushti matn sifatida */
+  --c-surface-obsidian: 17 23 20;
+  --c-surface-carbon: 22 30 26;
+  --c-surface-slate: 28 37 33;
+  --c-surface-elevated: 35 46 41;
+  --c-text-crisp: 245 253 249;
+  --c-text-muted: 143 163 148;
+
+  --c-outline: 132 149 136;
+  --c-on-surface: 225 227 225;
+  --c-on-surface-variant: 185 203 189;
+  --c-accent-electric-lime: 210 255 0;
+  --c-accent-hyper-emerald: 0 245 155;
+  --c-background: 17 20 19;
+  --c-surface: 17 20 19;
+  --c-surface-container: 29 32 31;
+  --c-surface-container-low: 25 28 27;
+  --c-surface-container-high: 40 43 41;
+  --c-surface-container-highest: 50 53 52;
+  --c-surface-container-lowest: 12 15 14;
+  --c-outline-variant: 59 74 63;
+  --c-on-background: 225 227 225;
+  --c-surface-variant: 50 53 52;
+
+  --glow: 0 245 155;               /* yorug'lik/soya rangi */
+  --glow-2: 16 185 129;
+  --ink: 255 255 255;              /* "oq" qoplamalar (bg-white/5 ...) */
+  --primary-glow: rgba(0, 245, 155, 0.4);
+  --border-glass: rgba(255, 255, 255, 0.09);
+  --border-accent: rgba(0, 245, 155, 0.35);
+  --body-bg: radial-gradient(circle at 50% 0%, #1a2520 0%, #151d19 45%, #101613 100%);
+  --body-bg-color: #121815;
+  --body-text: #e1e6e3;
+  --star-off: #3f4a44;
+  --cursor-rgb: 0 245 155;
+  --cursor-rgb-2: 16 185 129;
+  --cursor-rgb-3: 45 212 191;
+  --cursor-rgb-4: 210 255 0;
+  --cursor-core: 255 255 255;
+  --cursor-blend: screen;
+
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+/* ---------- Och yashil ---------- */
+html[data-theme="mint"] {
+  --c-primary: 16 185 129;
+  --c-primary-ink: 4 120 87;
+  --c-accent-emerald: 5 150 105;
+  --c-accent-lime: 132 204 22;
+  --c-accent-ink: 63 98 18;
+  --c-surface-obsidian: 244 251 247;
+  --c-surface-carbon: 255 255 255;
+  --c-surface-slate: 233 246 238;
+  --c-surface-elevated: 220 240 229;
+  --c-text-crisp: 15 38 28;
+  --c-text-muted: 74 100 86;
+
+  --c-outline: 94 120 106;
+  --c-on-surface: 15 38 28;
+  --c-on-surface-variant: 74 100 86;
+  --c-accent-electric-lime: 132 204 22;
+  --c-accent-hyper-emerald: 16 185 129;
+  --c-background: 238 249 242;
+  --c-surface: 238 249 242;
+  --c-surface-container: 233 246 238;
+  --c-surface-container-low: 241 250 245;
+  --c-surface-container-high: 224 242 232;
+  --c-surface-container-highest: 212 237 222;
+  --c-surface-container-lowest: 255 255 255;
+  --c-outline-variant: 178 214 194;
+  --c-on-background: 15 38 28;
+  --c-surface-variant: 212 237 222;
+
+  --glow: 16 185 129;
+  --glow-2: 5 150 105;
+  --ink: 10 60 38;
+  --primary-glow: rgba(16, 185, 129, 0.3);
+  --border-glass: rgba(10, 60, 38, 0.14);
+  --border-accent: rgba(5, 150, 105, 0.4);
+  --body-bg: radial-gradient(circle at 50% 0%, #f7fdf9 0%, #ecf8f1 45%, #e0f3e8 100%);
+  --body-bg-color: #ecf8f1;
+  --body-text: #1b3a2c;
+  --star-off: #c5d9cd;
+  --cursor-rgb: 16 185 129;
+  --cursor-rgb-2: 5 150 105;
+  --cursor-rgb-3: 20 184 166;
+  --cursor-rgb-4: 132 204 22;
+  --cursor-core: 6 78 59;
+  --cursor-blend: source-over;
+  color-scheme: light;
+}
+
+/* ---------- Och siyohrang ---------- */
+html[data-theme="lavender"] {
+  --c-primary: 167 139 250;
+  --c-primary-ink: 109 40 217;
+  --c-accent-emerald: 124 58 237;
+  --c-accent-lime: 217 70 239;
+  --c-accent-ink: 162 28 175;
+  --c-surface-obsidian: 247 244 255;
+  --c-surface-carbon: 255 255 255;
+  --c-surface-slate: 241 236 254;
+  --c-surface-elevated: 231 223 252;
+  --c-text-crisp: 31 20 58;
+  --c-text-muted: 104 92 134;
+
+  --c-outline: 120 108 150;
+  --c-on-surface: 31 20 58;
+  --c-on-surface-variant: 104 92 134;
+  --c-accent-electric-lime: 217 70 239;
+  --c-accent-hyper-emerald: 139 92 246;
+  --c-background: 244 240 255;
+  --c-surface: 244 240 255;
+  --c-surface-container: 240 235 254;
+  --c-surface-container-low: 246 243 255;
+  --c-surface-container-high: 232 225 252;
+  --c-surface-container-highest: 222 213 250;
+  --c-surface-container-lowest: 255 255 255;
+  --c-outline-variant: 200 189 238;
+  --c-on-background: 31 20 58;
+  --c-surface-variant: 222 213 250;
+
+  --glow: 139 92 246;
+  --glow-2: 124 58 237;
+  --ink: 40 20 90;
+  --primary-glow: rgba(139, 92, 246, 0.3);
+  --border-glass: rgba(40, 20, 90, 0.14);
+  --border-accent: rgba(124, 58, 237, 0.4);
+  --body-bg: radial-gradient(circle at 50% 0%, #fbf9ff 0%, #f1ecfd 45%, #e7dffb 100%);
+  --body-bg-color: #f1ecfd;
+  --body-text: #2a1c4d;
+  --star-off: #d5cdee;
+  --cursor-rgb: 139 92 246;
+  --cursor-rgb-2: 124 58 237;
+  --cursor-rgb-3: 192 132 252;
+  --cursor-rgb-4: 217 70 239;
+  --cursor-core: 59 7 100;
+  --cursor-blend: source-over;
+  color-scheme: light;
+}
+
+/* ---------- Shriftlar ---------- */
+html[data-font="hanken"]   { --font-body: 'Hanken Grotesk', system-ui, sans-serif; }
+html[data-font="inter"]    { --font-body: 'Inter', system-ui, sans-serif; }
+html[data-font="atkinson"] { --font-body: 'Atkinson Hyperlegible', system-ui, sans-serif; }
+html[data-font="system"]   { --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+html[data-font="serif"]    { --font-body: 'Lora', Georgia, 'Times New Roman', serif; }
+html[data-font="mono"]     { --font-body: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; }
+/* Sarlavha shrifti: "body" tanlansa sarlavhalar ham matn shriftida */
+html[data-heading="body"]  { --font-display: var(--font-body); }
+html[data-heading="serif"] { --font-display: 'Lora', Georgia, serif; }
+
+/* ---------- Matn o'lchami (rem asosidagi hamma narsa masshtablanadi) ---------- */
+html[data-size="sm"] { font-size: 14px; }
+html[data-size="md"] { font-size: 16px; }
+html[data-size="lg"] { font-size: 18px; }
+html[data-size="xl"] { font-size: 20px; }
+
+/* ---------- Animatsiya ---------- */
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0s !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-motion="reduced"] .dark-glass-card:hover,
+html[data-motion="reduced"] .neon-glow-btn:hover { transform: none; }
+html[data-motion="reduced"] .orbit-ring { animation: none !important; }
+html[data-ambient="off"] .kinetic-ambient-1,
+html[data-ambient="off"] .kinetic-ambient-2,
+html[data-ambient="off"] .kinetic-ambient-3 { display: none; }
+html[data-ripple="off"] .pond-ripple-container { display: none !important; }
+
+/* ---------- Yorug' mavzular: qattiq yozilgan Tailwind ranglarini moslash ---------- */
+html[data-tone="light"] .text-primary,
+html[data-tone="light"] .hover\:text-primary:hover,
+html[data-tone="light"] .group:hover .group-hover\:text-primary,
+html[data-tone="light"] .text-primary\/70,
+html[data-tone="light"] .text-primary\/80,
+html[data-tone="light"] .text-accent-hyper-emerald,
+html[data-tone="light"] .text-emerald-300 { color: rgb(var(--c-primary-ink)); }
+html[data-tone="light"] .text-accent-lime,
+html[data-tone="light"] .text-accent-electric-lime,
+html[data-tone="light"] .hover\:text-accent-lime:hover { color: rgb(var(--c-accent-ink)); }
+
+html[data-tone="light"] .text-zinc-100,
+html[data-tone="light"] .text-zinc-300,
+html[data-tone="light"] .hover\:text-white:hover { color: rgb(var(--c-text-crisp)); }
+html[data-tone="light"] .text-zinc-400,
+html[data-tone="light"] .text-zinc-500 { color: rgb(var(--c-text-muted)); }
+html[data-tone="light"] .text-zinc-600 { color: rgb(var(--c-text-muted) / 0.65); }
+html[data-tone="light"] .placeholder\:text-zinc-500::placeholder { color: rgb(var(--c-text-muted) / 0.7); }
+html[data-tone="light"] .bg-zinc-950,
+html[data-tone="light"] .bg-zinc-900 { background-color: rgb(var(--c-surface-carbon)); }
+html[data-tone="light"] .bg-zinc-800 { background-color: rgb(var(--c-surface-slate)); }
+html[data-tone="light"] .bg-zinc-600 { background-color: rgb(var(--c-text-muted) / 0.5); }
+html[data-tone="light"] .border-zinc-700 { border-color: var(--border-glass); }
+
+html[data-tone="light"] .text-red-300,
+html[data-tone="light"] .text-red-400 { color: rgb(185 28 28); }
+html[data-tone="light"] .text-amber-200,
+html[data-tone="light"] .text-amber-300,
+html[data-tone="light"] .text-amber-400 { color: rgb(180 83 9); }
+html[data-tone="light"] .text-sky-300 { color: rgb(3 105 161); }
+html[data-tone="light"] .text-indigo-300 { color: rgb(67 56 202); }
+html[data-tone="light"] .text-cyan-100 { color: rgb(22 78 99); }
+html[data-tone="light"] .text-fuchsia-300 { color: rgb(162 28 175); }
+html[data-tone="light"] .bg-emerald-400,
+html[data-tone="light"] .hover\:bg-emerald-400:hover { background-color: rgb(var(--c-accent-emerald)); }
+
+html[data-tone="light"] .bg-white\/5,
+html[data-tone="light"] .hover\:bg-white\/5:hover { background-color: rgb(var(--ink) / 0.05); }
+html[data-tone="light"] .bg-white\/10 { background-color: rgb(var(--ink) / 0.1); }
+html[data-tone="light"] .bg-white\/\[0\.02\] { background-color: rgb(var(--ink) / 0.03); }
+html[data-tone="light"] .border-white\/5 { border-color: rgb(var(--ink) / 0.08); }
+html[data-tone="light"] .border-white\/10 { border-color: rgb(var(--ink) / 0.14); }
+html[data-tone="light"] .border-white\/20,
+html[data-tone="light"] .hover\:border-white\/20:hover { border-color: rgb(var(--ink) / 0.24); }
+
+/* Yorug' mavzuda suv to'lqini oq emas, mavzu rangida ko'rinsin */
+html[data-tone="light"] .pond-wave.wave-1 { border-color: rgb(var(--glow) / 0.7); background: radial-gradient(circle, rgb(var(--glow) / 0.3) 0%, transparent 70%); box-shadow: 0 0 16px rgb(var(--glow) / 0.4); }
+html[data-tone="light"] .pond-wave.wave-sheen { background: radial-gradient(circle, rgb(var(--glow) / 0.35) 0%, transparent 60%); }

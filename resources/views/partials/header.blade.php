@@ -42,9 +42,13 @@
 </button>
 <span id="nav-wishlist-count" class="bg-accent-lime text-black border border-surface-obsidian pointer-events-none" style="position: absolute; top: -4px; right: -4px; z-index: 20; min-width: 18px; height: 18px; padding: 0 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border-radius: 9999px; overflow: visible; box-shadow: 0 2px 5px rgba(0,0,0,0.5); display: {{ $wishlistData['count'] > 0 ? 'flex' : 'none' }};">{{ $wishlistData['count'] }}</span>
 </div>
+<!-- Settings Button (theme, font, profile photo) -->
+<a href="{{ route('settings') }}" aria-label="Settings" title="Settings" class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border flex items-center justify-center hover:text-primary hover:border-primary/40 transition-colors {{ request()->routeIs('settings') ? 'border-primary/60 text-primary' : 'border-border-glass text-text-crisp' }}">
+<i class="bi bi-sliders text-base"></i>
+</a>
 <!-- Profile Button -->
 <a href="{{ route('profile') }}" aria-label="{{ auth()->check() ? 'My profile' : 'Sign in' }}" title="{{ auth()->check() ? 'My profile' : 'Sign in' }}" class="water-ripple-target w-11 h-11 rounded-full bg-surface-carbon border flex items-center justify-center hover:text-primary hover:border-primary/40 transition-colors {{ request()->routeIs('profile') ? 'border-primary/60 text-primary' : 'border-border-glass text-text-crisp' }}">
-<i class="bi bi-person text-lg"></i>
+<x-avatar :user="auth()->user()" size="w-full h-full" />
 </a>
 <!-- Cart Button with isolated badge outside overflow -->
 <div class="relative overflow-visible" id="cart-counter-btn">

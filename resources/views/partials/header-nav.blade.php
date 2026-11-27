@@ -1,6 +1,6 @@
 @php
     $pill = 'water-ripple-target flex h-[30px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full text-xs uppercase tracking-wider cursor-pointer transition-all';
-    $pillOn = $pill.' px-4 font-bold bg-primary text-black shadow-[0_0_12px_rgba(0,245,155,0.35)]';
+    $pillOn = $pill.' px-4 font-bold bg-primary text-black shadow-[0_0_12px_var(--primary-glow)]';
     $pillOff = $pill.' px-3.5 font-medium text-text-muted hover:text-text-crisp bg-surface-carbon/80 border border-border-glass hover:border-primary/30';
     $pillDeal = $pill.' px-3.5 font-semibold text-accent-lime hover:text-white bg-surface-carbon/80 border border-accent-lime/30';
     $activeCategory = request()->route('category');

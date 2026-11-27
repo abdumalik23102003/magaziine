@@ -3,7 +3,7 @@
         $base = 'inline-flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm font-mono font-bold transition-all';
         $idle = 'border-white/10 bg-white/5 text-text-crisp hover:border-primary/60 hover:text-primary';
         $off = 'border-white/5 bg-white/[0.02] text-zinc-600 cursor-not-allowed';
-        $on = 'border-primary bg-primary text-black shadow-[0_0_16px_rgba(0,245,155,0.35)]';
+        $on = 'border-primary bg-primary text-black shadow-[0_0_16px_var(--primary-glow)]';
     @endphp
 
     <nav role="navigation" aria-label="Pagination" class="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">

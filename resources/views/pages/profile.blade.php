@@ -7,12 +7,11 @@
 
 <section class="mt-6 dark-glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
     <div class="flex items-center gap-5">
-        <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-accent-lime flex items-center justify-center font-display font-black text-3xl text-black shadow-[0_0_24px_rgba(0,245,155,0.3)]">
-            {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
-        </div>
+        <x-avatar :user="$user" initial size="w-20 h-20" text="text-3xl" class="shadow-[0_0_24px_var(--primary-glow)]" />
         <div>
             <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-text-crisp">{{ $user->name }}</h1>
             <p class="text-sm text-text-muted">{{ $user->email }} &middot; member since {{ $user->created_at->format('M Y') }}</p>
+            <a href="{{ route('settings') }}" class="mt-1 inline-block text-xs font-bold text-primary hover:underline">Change photo, theme &amp; fonts</a>
         </div>
     </div>
     <div class="flex items-center gap-2">

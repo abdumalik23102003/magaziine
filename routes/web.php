@@ -12,6 +12,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,9 @@ Route::delete('/wishlist/{productId}', [WishlistController::class, 'destroy'])->
 // Joylashuv (header tugmasi)
 Route::post('/location/resolve', [LocationController::class, 'resolve'])->middleware('throttle:10,1')->name('location.resolve');
 
+// Sozlamalar: hamma uchun (mehmon ham). Rasm yuklash/o'chirish faqat kirganlar uchun (pastda).
+Route::get('/settings', [SettingsController::class, 'show'])->name('settings');
+
 // Mehmonlar uchun
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -70,6 +74,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'password'])->name('profile.password');
+
+    Route::post('/settings/avatar', [SettingsController::class, 'updateAvatar'])->middleware('throttle:10,1')->name('settings.avatar.update');
+    Route::delete('/settings/avatar', [SettingsController::class, 'destroyAvatar'])->name('settings.avatar.destroy');
 });
 
 require __DIR__.'/support.php';

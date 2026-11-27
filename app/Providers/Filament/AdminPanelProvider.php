@@ -31,6 +31,10 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->databaseNotifications()
             ->userMenuItems([
+                Action::make('site-settings')
+                    ->label('Settings & profile photo')
+                    ->icon('heroicon-o-paint-brush')
+                    ->url('/settings'),
                 Action::make('partner-panel')
                     ->label('Partner panel')
                     ->icon('heroicon-o-building-storefront')

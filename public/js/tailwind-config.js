@@ -3,22 +3,22 @@
     theme: {
       extend: {
         colors: {
-          "primary": "#00f59b",
-          "primary-glow": "rgba(0, 245, 155, 0.4)",
-          "accent-emerald": "#10b981",
-          "accent-lime": "#d2ff00",
-          "surface-obsidian": "#111714",
-          "surface-carbon": "#161e1a",
-          "surface-slate": "#1c2521",
-          "surface-elevated": "#232e29",
-          "border-glass": "rgba(255, 255, 255, 0.09)",
-          "border-accent": "rgba(0, 245, 155, 0.35)",
-          "text-crisp": "#f5fdf9",
-          "text-muted": "#8fa394"
-        },
+            "primary": "rgb(var(--c-primary) / <alpha-value>)",
+            "accent-emerald": "rgb(var(--c-accent-emerald) / <alpha-value>)",
+            "accent-lime": "rgb(var(--c-accent-lime) / <alpha-value>)",
+            "surface-obsidian": "rgb(var(--c-surface-obsidian) / <alpha-value>)",
+            "surface-carbon": "rgb(var(--c-surface-carbon) / <alpha-value>)",
+            "surface-slate": "rgb(var(--c-surface-slate) / <alpha-value>)",
+            "surface-elevated": "rgb(var(--c-surface-elevated) / <alpha-value>)",
+            "text-crisp": "rgb(var(--c-text-crisp) / <alpha-value>)",
+            "text-muted": "rgb(var(--c-text-muted) / <alpha-value>)",
+            "primary-glow": "var(--primary-glow)",
+            "border-glass": "var(--border-glass)",
+            "border-accent": "var(--border-accent)"
+  },
         fontFamily: {
-          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-          display: ['"Space Grotesk"', 'sans-serif']
+          sans: ['var(--font-body)'],
+          display: ['var(--font-display)']
         }
       }
     }
